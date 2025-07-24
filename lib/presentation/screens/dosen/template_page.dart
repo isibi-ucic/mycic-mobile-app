@@ -1,0 +1,104 @@
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:245925129.
+// Suggested code may be subject to a license. Learn more: ~LicenseLog:3990274555.
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:myapp/presentation/screens/dosen/absensi_page.dart';
+import 'package:myapp/presentation/screens/dosen/class_page.dart';
+import 'package:myapp/presentation/screens/dosen/home_page.dart';
+// import 'package:myapp/presentation/screens/scanner_page.dart';
+
+import '../../../../core/core.dart';
+
+class TemplateDosenPage extends StatefulWidget {
+  const TemplateDosenPage({super.key});
+
+  @override
+  State<TemplateDosenPage> createState() => _TemplateDosenPageState();
+}
+
+class _TemplateDosenPageState extends State<TemplateDosenPage> {
+  int _selectedIndex = 0;
+  final _widgets = [
+    // const HomePage(),
+    const HomePage(),
+    AbsensiPage(),
+    const ClassPage(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: IndexedStack(index: _selectedIndex, children: _widgets),
+
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(16.0),
+            topRight: Radius.circular(16.0),
+          ),
+          boxShadow: [
+            BoxShadow(color: AppColors.white, offset: const Offset(0, -12)),
+            BoxShadow(
+              blurRadius: 4.0,
+              blurStyle: BlurStyle.outer,
+              offset: const Offset(0, -10),
+              spreadRadius: 1,
+              color: AppColors.grey,
+            ),
+          ],
+        ),
+        child: Theme(
+          data: ThemeData(
+            splashColor: Colors.transparent,
+            highlightColor: Colors.transparent,
+          ),
+          child: BottomNavigationBar(
+            useLegacyColorScheme: true,
+            currentIndex: _selectedIndex,
+            onTap: (value) {
+              HapticFeedback.mediumImpact();
+              setState(() => _selectedIndex = value);
+            },
+
+            type: BottomNavigationBarType.fixed,
+            backgroundColor: AppColors.white,
+            selectedLabelStyle: const TextStyle(color: AppColors.primary),
+            selectedIconTheme: const IconThemeData(color: AppColors.primary),
+            elevation: 0,
+            items: [
+              BottomNavigationBarItem(
+                icon: Assets.icons.nav.home.svg(
+                  colorFilter: ColorFilter.mode(
+                    _selectedIndex == 0 ? AppColors.primary : AppColors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+
+                label: 'Home',
+              ),
+              BottomNavigationBarItem(
+                icon: Assets.icons.nav.scan.svg(
+                  colorFilter: ColorFilter.mode(
+                    _selectedIndex == 1 ? AppColors.primary : AppColors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+
+                label: 'Daftar Presensi',
+              ),
+              BottomNavigationBarItem(
+                icon: Assets.icons.nav.myclass.svg(
+                  colorFilter: ColorFilter.mode(
+                    _selectedIndex == 2 ? AppColors.primary : AppColors.grey,
+                    BlendMode.srcIn,
+                  ),
+                ),
+
+                label: 'Kelas',
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
