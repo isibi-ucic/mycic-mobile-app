@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 class UjianResponseModel {
-  final String? message;
-  final List<Datum>? data;
+  final String message;
+  final List<Datum> data;
 
-  UjianResponseModel({this.message, this.data});
+  UjianResponseModel({required this.message, required this.data});
 
   factory UjianResponseModel.fromJson(String str) =>
       UjianResponseModel.fromMap(json.decode(str));
@@ -14,23 +14,20 @@ class UjianResponseModel {
   factory UjianResponseModel.fromMap(Map<String, dynamic> json) =>
       UjianResponseModel(
         message: json["message"],
-        data:
-            json["data"] == null
-                ? []
-                : List<Datum>.from(json["data"]!.map((x) => Datum.fromMap(x))),
+        data: List<Datum>.from(json["data"].map((x) => Datum.fromMap(x))),
       );
 
   Map<String, dynamic> toMap() => {
     "message": message,
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toMap())),
+    "data": List<dynamic>.from(data.map((x) => x.toMap())),
   };
 }
 
 class Datum {
-  final String? hari;
-  final List<Ujian>? ujian;
+  final String hari;
+  final List<Ujian> ujian;
 
-  Datum({this.hari, this.ujian});
+  Datum({required this.hari, required this.ujian});
 
   factory Datum.fromJson(String str) => Datum.fromMap(json.decode(str));
 
@@ -38,34 +35,30 @@ class Datum {
 
   factory Datum.fromMap(Map<String, dynamic> json) => Datum(
     hari: json["hari"],
-    ujian:
-        json["ujian"] == null
-            ? []
-            : List<Ujian>.from(json["ujian"]!.map((x) => Ujian.fromMap(x))),
+    ujian: List<Ujian>.from(json["ujian"].map((x) => Ujian.fromMap(x))),
   );
 
   Map<String, dynamic> toMap() => {
     "hari": hari,
-    "ujian":
-        ujian == null ? [] : List<dynamic>.from(ujian!.map((x) => x.toMap())),
+    "ujian": List<dynamic>.from(ujian.map((x) => x.toMap())),
   };
 }
 
 class Ujian {
-  final JenisUjian? jenisUjian;
-  final DateTime? tanggal;
-  final String? jam;
-  final String? ruang;
-  final String? mataKuliah;
-  final String? dosenPengajar;
+  final JenisUjian jenisUjian;
+  final DateTime tanggal;
+  final String jam;
+  final String ruang;
+  final String mataKuliah;
+  final String dosenPengajar;
 
   Ujian({
-    this.jenisUjian,
-    this.tanggal,
-    this.jam,
-    this.ruang,
-    this.mataKuliah,
-    this.dosenPengajar,
+    required this.jenisUjian,
+    required this.tanggal,
+    required this.jam,
+    required this.ruang,
+    required this.mataKuliah,
+    required this.dosenPengajar,
   });
 
   factory Ujian.fromJson(String str) => Ujian.fromMap(json.decode(str));
@@ -74,7 +67,7 @@ class Ujian {
 
   factory Ujian.fromMap(Map<String, dynamic> json) => Ujian(
     jenisUjian: jenisUjianValues.map[json["jenis_ujian"]]!,
-    tanggal: json["tanggal"] == null ? null : DateTime.parse(json["tanggal"]),
+    tanggal: DateTime.parse(json["tanggal"]),
     jam: json["jam"],
     ruang: json["ruang"],
     mataKuliah: json["mata_kuliah"],
@@ -84,7 +77,7 @@ class Ujian {
   Map<String, dynamic> toMap() => {
     "jenis_ujian": jenisUjianValues.reverse[jenisUjian],
     "tanggal":
-        "${tanggal!.year.toString().padLeft(4, '0')}-${tanggal!.month.toString().padLeft(2, '0')}-${tanggal!.day.toString().padLeft(2, '0')}",
+        "${tanggal.year.toString().padLeft(4, '0')}-${tanggal.month.toString().padLeft(2, '0')}-${tanggal.day.toString().padLeft(2, '0')}",
     "jam": jam,
     "ruang": ruang,
     "mata_kuliah": mataKuliah,

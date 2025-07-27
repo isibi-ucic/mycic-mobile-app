@@ -30,232 +30,242 @@ class _TranskripPageState extends State<TranskripPage> {
       appBar: DefaultAppBar(title: 'Transkrip Nilai'),
       body: RefreshIndicator(
         onRefresh: _loadData,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              // ... (code before this)
-              Container(
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: BlocBuilder<TranskripBloc, TranskripState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      orElse: () {
-                        // Menampilkan loading indicator saat data belum siap
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                      loading: () {
-                        return const Center(child: CircularProgressIndicator());
-                      },
-                      error: (message) {
-                        return Center(child: Text(message));
-                      },
-                      success: (res) {
-                        final List<SemuaMataKuliah>? itemMk =
-                            res.data?.semuaMataKuliah;
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            // [PENTING] SingleChildScrollView sekarang menjadi parent utama untuk scrolling
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              // [LOGIKA DIPERBARUI] Gunakan ConstrainedBox untuk memastikan child-nya
+              // (yaitu BlocBuilder) memiliki tinggi minimal setinggi layar.
+              // Ini adalah kunci agar scrolling selalu aktif.
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    // ... (code before this)
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: BlocBuilder<TranskripBloc, TranskripState>(
+                        builder: (context, state) {
+                          return state.maybeWhen(
+                            orElse: () {
+                              // Menampilkan loading indicator saat data belum siap
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            loading: () {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                            error: (message) {
+                              return Center(child: Text(message));
+                            },
+                            success: (res) {
+                              final List<SemuaMataKuliah>? itemMk =
+                                  res.data?.semuaMataKuliah;
 
-                        if (itemMk == null || itemMk.isEmpty) {
-                          return const Center(
-                            child: Text("Data transkrip tidak ditemukan."),
-                          );
-                        }
-
-                        return Column(
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(8),
-                              child: Table(
-                                border: TableBorder.symmetric(
-                                  inside: const BorderSide(
-                                    color: Colors.grey,
-                                    width: 0.3,
+                              if (itemMk == null || itemMk.isEmpty) {
+                                return const Center(
+                                  child: Text(
+                                    "Data transkrip tidak ditemukan.",
                                   ),
-                                ),
-                                columnWidths: const {
-                                  0: FixedColumnWidth(50),
-                                  1: FlexColumnWidth(),
-                                  2: FixedColumnWidth(70),
-                                },
+                                );
+                              }
+
+                              return Column(
                                 children: [
-                                  // Header
-                                  TableRow(
-                                    decoration: BoxDecoration(
-                                      color: Colors.blue[200],
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(8),
+                                    child: Table(
+                                      border: TableBorder.symmetric(
+                                        inside: const BorderSide(
+                                          color: Colors.grey,
+                                          width: 0.3,
+                                        ),
+                                      ),
+                                      columnWidths: const {
+                                        0: FixedColumnWidth(50),
+                                        1: FlexColumnWidth(),
+                                        2: FixedColumnWidth(70),
+                                      },
+                                      children: [
+                                        // Header
+                                        TableRow(
+                                          decoration: BoxDecoration(
+                                            color: Colors.blue[200],
+                                          ),
+                                          children: const [
+                                            Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Center(
+                                                child: Text(
+                                                  'No',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Text(
+                                                'Mata Kuliah',
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                            Padding(
+                                              padding: EdgeInsets.all(12),
+                                              child: Center(
+                                                child: Text(
+                                                  'Nilai',
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.bold,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+
+                                        // Isi (Corrected Section)
+                                        ...itemMk.asMap().entries.map((entry) {
+                                          final index = entry.key;
+                                          final item = entry.value;
+
+                                          return TableRow(
+                                            decoration: const BoxDecoration(
+                                              color: Colors.white,
+                                            ),
+                                            children: [
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "${index + 1}",
+                                                  ), // Corrected
+                                                ),
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
+                                                child: Text(
+                                                  "${item.namaMk}",
+                                                ), // Correct
+                                              ),
+                                              Padding(
+                                                padding: const EdgeInsets.all(
+                                                  12,
+                                                ),
+                                                child: Center(
+                                                  child: Text(
+                                                    "${item.nilaiHuruf}",
+                                                  ), // Correct
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                      ],
                                     ),
-                                    children: const [
-                                      Padding(
-                                        padding: EdgeInsets.all(12),
-                                        child: Center(
-                                          child: Text(
-                                            'No',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+
+                    // ... (rest of your code)
+                    const Spacer(),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'IPK',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
                                         ),
                                       ),
-                                      Padding(
-                                        padding: EdgeInsets.all(12),
-                                        child: Text(
-                                          'Mata Kuliah',
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.all(12),
-                                        child: Center(
-                                          child: Text(
-                                            'Nilai',
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        // ipk.toStringAsFixed(2),
+                                        "de",
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.blue,
                                         ),
                                       ),
                                     ],
                                   ),
-
-                                  // Isi (Corrected Section)
-                                  ...itemMk.asMap().entries.map((entry) {
-                                    final index = entry.key;
-                                    final item = entry.value;
-
-                                    return TableRow(
-                                      decoration: const BoxDecoration(
-                                        color: Colors.white,
+                                  Column(
+                                    children: [
+                                      const Text(
+                                        'Total SKS',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: Colors.grey,
+                                        ),
                                       ),
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Center(
-                                            child: Text(
-                                              "${index + 1}",
-                                            ), // Corrected
-                                          ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        // totalSks.toString(),
+                                        "89",
+                                        style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.green,
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Text(
-                                            "${item.namaMk}",
-                                          ), // Correct
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.all(12),
-                                          child: Center(
-                                            child: Text(
-                                              "${item.nilaiHuruf}",
-                                            ), // Correct
-                                          ),
-                                        ),
-                                      ],
-                                    );
-                                  }),
+                                      ),
+                                    ],
+                                  ),
                                 ],
                               ),
                             ),
+                            Button.filled(
+                              label: 'Cetak Transkrip',
+                              onPressed: () {
+                                // Implement the print functionality here
+                              },
+                            ),
                           ],
-                        );
-                      },
-                    );
-                  },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-
-              // ... (rest of your code)
-              const Spacer(),
-
-              BlocBuilder<TranskripBloc, TranskripState>(
-                builder: (context, state) {
-                  return state.maybeWhen(
-                    orElse: () {
-                      return const Text("Kosong nilai");
-                    },
-                    success: (res) {
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.grey[200],
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        const Text(
-                                          'IPK',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          // ipk.toStringAsFixed(2),
-                                          "de",
-                                          style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.blue,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      children: [
-                                        const Text(
-                                          'Total SKS',
-                                          style: TextStyle(
-                                            fontSize: 14,
-                                            color: Colors.grey,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 8),
-                                        Text(
-                                          // totalSks.toString(),
-                                          "89",
-                                          style: const TextStyle(
-                                            fontSize: 24,
-                                            fontWeight: FontWeight.bold,
-                                            color: Colors.green,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              Button.filled(
-                                label: 'Cetak Transkrip',
-                                onPressed: () {
-                                  // Implement the print functionality here
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

@@ -1,10 +1,7 @@
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:245925129.
-// Suggested code may be subject to a license. Learn more: ~LicenseLog:3990274555.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:myapp/presentation/screens/mhs/class_page.dart';
 import 'package:myapp/presentation/screens/mhs/home_page.dart';
-import 'package:myapp/presentation/screens/mhs/qr_code_with_frame_page.dart';
 import 'package:myapp/presentation/screens/mhs/scanner_page.dart';
 // import 'package:myapp/presentation/screens/scanner_page.dart';
 
@@ -22,7 +19,7 @@ class _TemplateMhsPageState extends State<TemplateMhsPage> {
   final _widgets = [
     // const HomePage(),
     const HomePage(),
-    const QrCodeWithFramePage(),
+    const ScannerPage(),
     const ClassPage(),
   ];
   @override

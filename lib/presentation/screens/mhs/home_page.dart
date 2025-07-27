@@ -115,7 +115,10 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            HeaderWidget(profileImageUrl: 'https://my.cic.ac.id/portal/files/fotostudent/20210120027.jpg'),
+            HeaderWidget(
+              profileImageUrl:
+                  'https://my.cic.ac.id/portal/files/fotostudent/20210120027.jpg',
+            ),
             FutureBuilder<AuthResponseModel?>(
               future: AuthLocalDatasource().getAuthData(),
               builder: (context, snapshot) {
@@ -166,6 +169,7 @@ class _HomePageState extends State<HomePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: List.generate(bannerItems.length, (index) {
+                    // Logika untuk indikator titik sudah benar dan tidak perlu diubah
                     return Container(
                       width: 8.0,
                       height: 8.0,
@@ -374,5 +378,16 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+// Widget placeholder dengan layout yang sama seperti konten final
+class HeaderSkeleton extends StatelessWidget {
+  const HeaderSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // Gunakan struktur Column yang sama persis
+    return SizedBox(height: 160);
   }
 }

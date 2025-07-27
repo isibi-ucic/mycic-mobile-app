@@ -23,10 +23,12 @@ class _QrCodeWithFramePageState extends State<QrCodeWithFramePage>
 
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(seconds: 2),
-    )..repeat();
+      duration: const Duration(seconds: 2),
+    )..repeat(reverse: true); // <-- PERUBAHAN 1: Animasi bolak-balik
 
-    _animation = Tween<double>(begin: 0, end: 1).animate(_animationController);
+    _animation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _animationController, curve: Curves.easeInOut),
+    );
   }
 
   @override
@@ -39,12 +41,36 @@ class _QrCodeWithFramePageState extends State<QrCodeWithFramePage>
   void _onQRViewCreated(QRViewController controller) {
     this.controller = controller;
     controller.scannedDataStream.listen((scanData) {
-      if (result == null) {
+      if (mounted && result == null) {
+        // Hentikan animasi dan kamera setelah kode ditemukan
+        _animationController.stop();
+        controller.pauseCamera();
+
         setState(() {
           result = scanData;
         });
-        controller.pauseCamera();
-        Navigator.pop(context, scanData.code); // atau simpan hasil
+
+        // Tampilkan dialog atau kembali ke halaman sebelumnya dengan hasil
+        showDialog(
+          context: context,
+          builder:
+              (context) => AlertDialog(
+                title: const Text('QR Code Ditemukan!'),
+                content: Text('Data: ${scanData.code}'),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.pop(context); // Tutup dialog
+                      Navigator.pop(
+                        context,
+                        scanData.code,
+                      ); // Kembali ke halaman sebelumnya
+                    },
+                    child: const Text('OK'),
+                  ),
+                ],
+              ),
+        );
       }
     });
   }
@@ -55,36 +81,40 @@ class _QrCodeWithFramePageState extends State<QrCodeWithFramePage>
 
     return Scaffold(
       body: Stack(
+        alignment: Alignment.center,
         children: [
           QRView(
             key: qrKey,
             onQRViewCreated: _onQRViewCreated,
             overlay: QrScannerOverlayShape(
               borderColor: Colors.white,
-              borderRadius: 10,
+              borderRadius: 12,
               borderLength: 30,
               borderWidth: 10,
               cutOutSize: scanBoxSize,
             ),
           ),
-          // ClipPath Overlay (untuk gelap-terang)
-          ClipPath(
-            clipper: ScannerOverlayClip(scanBoxSize),
-            child: Container(color: Colors.black.withOpacity(0.6)),
-          ),
-          // Garis animasi
-          Positioned.fill(
+          // Frame animasi laser
+          SizedBox(
+            width: scanBoxSize,
+            height: scanBoxSize,
             child: AnimatedBuilder(
               animation: _animation,
-              builder: (context, _) {
-                final top =
-                    (MediaQuery.of(context).size.height - scanBoxSize) / 2 +
-                    (scanBoxSize * _animation.value);
-
+              builder: (context, child) {
                 return CustomPaint(
-                  painter: ScannerLinePainter(top, scanBoxSize),
+                  painter: ScannerLaserPainter(
+                    animationValue: _animation.value,
+                  ),
                 );
               },
+            ),
+          ),
+          // Tambahkan teks petunjuk
+          Positioned(
+            bottom: MediaQuery.of(context).size.height * 0.15,
+            child: const Text(
+              'Arahkan kamera ke QR Code',
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ),
         ],
@@ -93,57 +123,46 @@ class _QrCodeWithFramePageState extends State<QrCodeWithFramePage>
   }
 }
 
-class ScannerOverlayClip extends CustomClipper<Path> {
-  final double scanBoxSize;
+// PERUBAHAN 2: CustomPainter baru untuk efek laser
+class ScannerLaserPainter extends CustomPainter {
+  final double animationValue;
 
-  ScannerOverlayClip(this.scanBoxSize);
-
-  @override
-  Path getClip(Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final rect = Rect.fromCenter(
-      center: center,
-      width: scanBoxSize,
-      height: scanBoxSize,
-    );
-
-    final path =
-        Path()
-          ..addRect(Rect.fromLTWH(0, 0, size.width, size.height))
-          ..addRRect(RRect.fromRectXY(rect, 12, 12));
-
-    return Path.combine(
-      PathOperation.difference,
-      path,
-      Path()..addRRect(RRect.fromRectXY(rect, 12, 12)),
-    );
-  }
-
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
-
-class ScannerLinePainter extends CustomPainter {
-  final double y;
-  final double width;
-
-  ScannerLinePainter(this.y, this.width);
+  ScannerLaserPainter({required this.animationValue});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint =
-        Paint()
-          ..color = Colors.redAccent
-          ..strokeWidth = 3;
+    final laserY = size.height * animationValue;
+    const laserHeight = 60.0; // Ketinggian gradasi laser
 
-    final xStart = (size.width - width) / 2 + 8;
-    final xEnd = (size.width + width) / 2 - 8;
+    // Definisikan area untuk gradasi
+    final Rect rect = Rect.fromLTWH(
+      0,
+      laserY - laserHeight / 2,
+      size.width,
+      laserHeight,
+    );
 
-    canvas.drawLine(Offset(xStart, y), Offset(xEnd, y), paint);
+    // Buat gradasi linear
+    final gradient = LinearGradient(
+      colors: [
+        Colors.transparent,
+        Colors.red.withOpacity(0.8),
+        Colors.transparent,
+      ],
+      stops: const [0.0, 0.5, 1.0], // Tengah terang, tepi transparan
+      begin: Alignment.topCenter,
+      end: Alignment.bottomCenter,
+    );
+
+    // Buat Paint dengan shader dari gradasi
+    final paint = Paint()..shader = gradient.createShader(rect);
+
+    // Gambar persegi panjang dengan gradasi tersebut
+    canvas.drawRect(rect, paint);
   }
 
   @override
-  bool shouldRepaint(covariant ScannerLinePainter oldDelegate) {
-    return oldDelegate.y != y;
+  bool shouldRepaint(covariant ScannerLaserPainter oldDelegate) {
+    return oldDelegate.animationValue != animationValue;
   }
 }

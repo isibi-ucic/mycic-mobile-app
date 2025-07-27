@@ -51,7 +51,7 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: SingleChildScrollView(
-          // physics: const AlwaysScrollableScrollPhysics(),
+          physics: const AlwaysScrollableScrollPhysics(),
           child: Container(
             padding: const EdgeInsets.all(16),
 
@@ -175,6 +175,8 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                                     vertical: 20,
                                   ),
                                   child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Row(
                                         crossAxisAlignment:
@@ -210,7 +212,6 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                                       ),
                                       Text(
                                         pertemuan.materi ?? '',
-                                        textAlign: TextAlign.justify,
                                         style: const TextStyle(fontSize: 12),
                                       ),
                                     ],

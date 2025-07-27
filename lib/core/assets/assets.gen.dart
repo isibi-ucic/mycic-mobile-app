@@ -60,6 +60,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/share.svg
   SvgGenImage get share => const SvgGenImage('assets/icons/share.svg');
 
+  /// File path: assets/icons/success.svg
+  SvgGenImage get success => const SvgGenImage('assets/icons/success.svg');
+
   /// File path: assets/icons/user.svg
   SvgGenImage get user => const SvgGenImage('assets/icons/user.svg');
 
@@ -77,6 +80,7 @@ class $AssetsIconsGen {
         profile,
         reverse,
         share,
+        success,
         user
       ];
 }

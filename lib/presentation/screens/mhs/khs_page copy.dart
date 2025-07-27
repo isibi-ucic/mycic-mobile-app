@@ -1,37 +1,18 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/features/bloc/khs/khs_bloc.dart';
 import 'package:myapp/presentation/widgets/default_app_bar.dart';
 
-class KhsPage extends StatefulWidget {
-  const KhsPage({super.key});
+class KhsPage extends StatelessWidget {
+  KhsPage({super.key});
 
-  @override
-  State<KhsPage> createState() => _KhsPageState();
-}
-
-class _KhsPageState extends State<KhsPage> {
-  @override
-  void initState() {
-    super.initState();
-    // Memuat data saat halaman pertama kali dibuka
-    _loadData();
-  }
-
-  // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
-  Future<void> _loadData() async {
-    context.read<KhsBloc>().add(const KhsEvent.fetch());
-  }
-
+  // Sample data for KHS
   final List<Map<String, dynamic>> khsData = [
     {
       'semester': 1,
       'totalSks': 20,
       'ips': 3.50,
       'daftarMk': [
-        {'no': 'MK101', 'mataKuliah': 'Matematika Dasar', 'nilai': 'B'},
+        {'no': 'MK101', 'mataKuliah': 'Matematika Dasar', 'nilai': 'A'},
         {'no': 'MK102', 'mataKuliah': 'Fisika Dasar', 'nilai': 'B'},
         {'no': 'MK103', 'mataKuliah': 'Pengantar Pemrograman', 'nilai': 'A'},
       ],
@@ -77,64 +58,18 @@ class _KhsPageState extends State<KhsPage> {
       ],
     },
   ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const DefaultAppBar(title: 'Kartu Hasil Studi (KHS)'),
       backgroundColor: AppColors.bgDefault,
-      body: RefreshIndicator(
-        onRefresh: _loadData,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            // [PENTING] SingleChildScrollView sekarang menjadi parent utama untuk scrolling
-            return SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              // Gunakan ConstrainedBox untuk memastikan child-nya
-              // (yaitu BlocBuilder) memiliki tinggi minimal setinggi layar.
-              // Ini adalah kunci agar scrolling selalu aktif.
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: BlocBuilder<KhsBloc, KhsState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      orElse: () {
-                        return const Center(
-                          child: Text("Tarik ke bawah untuk memuat data."),
-                        );
-                      },
-
-                      success: (res) {
-                        return ListView.builder(
-                          itemCount: khsData.length,
-                          itemBuilder: (context, index) {
-                            final semesterData = khsData[index];
-                            return _buildSemesterCard(semesterData);
-                          },
-                        );
-                      },
-                      loading: () {
-                        // Tampilan loading
-                        return const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SpinKitThreeBounce(
-                                color: Colors.blueAccent,
-                                size: 20.0,
-                              ),
-                              SizedBox(height: 8),
-                              Text("Memuat Data KHS..."),
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-              ),
-            );
-          },
-        ),
+      body: ListView.builder(
+        itemCount: khsData.length,
+        itemBuilder: (context, index) {
+          final semesterData = khsData[index];
+          return _buildSemesterCard(semesterData);
+        },
       ),
     );
   }

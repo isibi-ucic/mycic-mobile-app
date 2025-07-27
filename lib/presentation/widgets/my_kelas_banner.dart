@@ -54,10 +54,11 @@ class MyKelasBanner extends StatelessWidget {
                 ),
                 const Spacer(),
                 FittedBox(
+                  fit: BoxFit.fill,
                   // Supaya button tidak overflow
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(0, 28),
+                      minimumSize: const Size(0, 25),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
@@ -68,9 +69,9 @@ class MyKelasBanner extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Text('Lihat Detail', style: TextStyle(fontSize: 10)),
+                        Text('Lihat Detail', style: TextStyle(fontSize: 8)),
                         SizedBox(width: 8),
-                        Icon(Icons.arrow_forward_ios, size: 10),
+                        Icon(Icons.arrow_forward_ios, size: 8),
                       ],
                     ),
                   ),

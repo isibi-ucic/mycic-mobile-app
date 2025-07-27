@@ -6,6 +6,7 @@ import 'package:myapp/features/bloc/auth/auth_bloc.dart';
 import 'package:myapp/features/bloc/info/info_bloc.dart';
 import 'package:myapp/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
 import 'package:myapp/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
+import 'package:myapp/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
 import 'package:myapp/features/bloc/transkrip/transkrip_bloc.dart';
 import 'package:myapp/presentation/screens/splash_page.dart';
 
@@ -35,6 +36,7 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => InfoBloc()),
         BlocProvider(create: (context) => MhsPresensiBloc()),
         BlocProvider(create: (context) => TranskripBloc()),
+        BlocProvider(create: (context) => MhsUjianBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
