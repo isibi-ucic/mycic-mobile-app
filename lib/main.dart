@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/features/bloc/auth/auth_bloc.dart';
 import 'package:mycic_app/features/bloc/info/info_bloc.dart';
+import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
@@ -37,6 +38,7 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => MhsPresensiBloc()),
         BlocProvider(create: (context) => TranskripBloc()),
         BlocProvider(create: (context) => MhsUjianBloc()),
+        BlocProvider(create: (context) => KhsBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

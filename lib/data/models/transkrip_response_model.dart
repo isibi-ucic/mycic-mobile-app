@@ -54,7 +54,7 @@ class Data {
 
 class SemuaMataKuliah {
   final int? idMk;
-  final NamaMk? namaMk;
+  final String? namaMk;
   final int? sks;
   final String? nilaiHuruf;
 
@@ -67,34 +67,15 @@ class SemuaMataKuliah {
 
   factory SemuaMataKuliah.fromMap(Map<String, dynamic> json) => SemuaMataKuliah(
     idMk: json["id_mk"],
-    namaMk: namaMkValues.map[json["nama_mk"]]!,
+    namaMk: json["nama_mk"],
     sks: json["sks"],
     nilaiHuruf: json["nilai_huruf"],
   );
 
   Map<String, dynamic> toMap() => {
     "id_mk": idMk,
-    "nama_mk": namaMkValues.reverse[namaMk],
+    "nama_mk": namaMk,
     "sks": sks,
     "nilai_huruf": nilaiHuruf,
   };
-}
-
-enum NamaMk { MATA_KULIAH_116, MATA_KULIAH_16 }
-
-final namaMkValues = EnumValues({
-  "Mata Kuliah 116": NamaMk.MATA_KULIAH_116,
-  "Mata Kuliah 16": NamaMk.MATA_KULIAH_16,
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

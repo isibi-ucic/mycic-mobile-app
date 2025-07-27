@@ -248,8 +248,8 @@ class _HomePageState extends State<HomePage> {
                           onTap: () {
                             msRoute(context, TugasPage());
                           },
-                          child: Row(
-                            children: const [
+                          child: const Row(
+                            children: [
                               Text(
                                 "Lihat Semua",
                                 style: TextStyle(color: AppColors.black),

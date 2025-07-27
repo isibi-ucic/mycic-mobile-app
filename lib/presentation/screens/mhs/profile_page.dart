@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycic_app/core/components/buttons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/services/external_url.dart';
 import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
 import 'package:mycic_app/data/models/auth_response_model.dart';
 import 'package:mycic_app/presentation/screens/login_page.dart';
@@ -90,9 +91,12 @@ class _ProfilePageState extends State<ProfilePage> {
 
                     // • Ambil nama jika ada
                     final user = snapshot.data!.user;
-                    final nama = user.nama ?? 'Nama Pengguna';
-                    final profil = user.profile ?? '';
-                    final numberId = user.userNumber ?? 'NIM/NIDN';
+                    final nama = user.nama;
+                    final profil = user.profile;
+                    final numberId = user.userNumber;
+
+                    // Ubah nomor telepon pusdatin
+                    const numberPhone = "6285795567332";
 
                     return Column(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -133,32 +137,49 @@ class _ProfilePageState extends State<ProfilePage> {
                             color: AppColors.black,
                           ),
                         ),
+
+                        // Jurusan
+                        const Text(
+                          "Teknik Informatika - VIII",
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 32),
+
+                        SimpleUnderlineButton(
+                          title: "Ubah Password",
+                          onTap: () {
+                            final String msg =
+                                "Halo, saya butuh bantuan untuk ubah password. Berikut adalah informasi akun saya:\n\nNama: $nama\nNIM: $numberId\n\nTerima kasih.";
+
+                            // convert ke url
+                            final encodedMsg = Uri.encodeComponent(msg);
+
+                            // handle aksi ubah password minta ke whatsapp
+                            externalUrl(
+                              context,
+                              'https://wa.me/$numberPhone?text=$encodedMsg',
+                            );
+                          },
+                        ),
+                        SimpleUnderlineButton(
+                          title: "Hubungi Pusdatin",
+                          onTap: () {
+                            // handle aksi hubungi pusdatin
+                            externalUrl(
+                              context,
+                              'https://wa.me/$numberPhone?text=Halo%20Pusdatin,%20saya%20butuh%20bantuan.',
+                            );
+                          },
+                        ),
                       ],
                     );
                   },
                 ),
 
                 const SizedBox(height: 4),
-
-                // Jurusan
-                const Text(
-                  "Teknik Informatika - VIII",
-                  style: TextStyle(fontSize: 16, color: AppColors.black),
-                ),
-                const SizedBox(height: 32),
-
-                SimpleUnderlineButton(
-                  title: "Ubah Password",
-                  onTap: () {
-                    // handle aksi ubah password
-                  },
-                ),
-                SimpleUnderlineButton(
-                  title: "Hubungi Pusdatin",
-                  onTap: () {
-                    // handle aksi hubungi pusdatin
-                  },
-                ),
 
                 const SizedBox(
                   height: 50,

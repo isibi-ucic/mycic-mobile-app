@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+// Ganti dengan path model Anda yang benar
+import 'package:mycic_app/data/models/khs_response_model.dart';
 import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
@@ -16,67 +18,13 @@ class _KhsPageState extends State<KhsPage> {
   @override
   void initState() {
     super.initState();
-    // Memuat data saat halaman pertama kali dibuka
     _loadData();
   }
 
-  // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
   Future<void> _loadData() async {
     context.read<KhsBloc>().add(const KhsEvent.fetch());
   }
 
-  final List<Map<String, dynamic>> khsData = [
-    {
-      'semester': 1,
-      'totalSks': 20,
-      'ips': 3.50,
-      'daftarMk': [
-        {'no': 'MK101', 'mataKuliah': 'Matematika Dasar', 'nilai': 'B'},
-        {'no': 'MK102', 'mataKuliah': 'Fisika Dasar', 'nilai': 'B'},
-        {'no': 'MK103', 'mataKuliah': 'Pengantar Pemrograman', 'nilai': 'A'},
-      ],
-    },
-    {
-      'semester': 2,
-      'totalSks': 22,
-      'ips': 3.75,
-      'daftarMk': [
-        {'no': 'MK201', 'mataKuliah': 'Kalkulus Lanjut', 'nilai': 'A'},
-        {'no': 'MK202', 'mataKuliah': 'Kimia Dasar', 'nilai': 'B+'},
-        {'no': 'MK203', 'mataKuliah': 'Struktur Data', 'nilai': 'A'},
-      ],
-    },
-    {
-      'semester': 3,
-      'totalSks': 24,
-      'ips': 3.90,
-      'daftarMk': [
-        {'no': 'MK301', 'mataKuliah': 'Aljabar Linear', 'nilai': 'A'},
-        {'no': 'MK302', 'mataKuliah': 'Fisika Modern', 'nilai': 'A'},
-        {'no': 'MK303', 'mataKuliah': 'Basis Data', 'nilai': 'A'},
-      ],
-    },
-    {
-      'semester': 4,
-      'totalSks': 23,
-      'ips': 3.85,
-      'daftarMk': [
-        {'no': 'MK401', 'mataKuliah': 'Analisis Numerik', 'nilai': 'A'},
-        {'no': 'MK402', 'mataKuliah': 'Sistem Operasi', 'nilai': 'A'},
-        {'no': 'MK403', 'mataKuliah': 'Jaringan Komputer', 'nilai': 'B+'},
-      ],
-    },
-    {
-      'semester': 5,
-      'totalSks': 21,
-      'ips': 3.65,
-      'daftarMk': [
-        {'no': 'MK501', 'mataKuliah': 'Kecerdasan Buatan', 'nilai': 'B+'},
-        {'no': 'MK502', 'mataKuliah': 'Rekayasa Perangkat Lunak', 'nilai': 'A'},
-        {'no': 'MK503', 'mataKuliah': 'Pemrograman Berbasis Web', 'nilai': 'B'},
-      ],
-    },
-  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,54 +32,42 @@ class _KhsPageState extends State<KhsPage> {
       backgroundColor: AppColors.bgDefault,
       body: RefreshIndicator(
         onRefresh: _loadData,
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            // [PENTING] SingleChildScrollView sekarang menjadi parent utama untuk scrolling
-            return SingleChildScrollView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              // Gunakan ConstrainedBox untuk memastikan child-nya
-              // (yaitu BlocBuilder) memiliki tinggi minimal setinggi layar.
-              // Ini adalah kunci agar scrolling selalu aktif.
-              child: ConstrainedBox(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                child: BlocBuilder<KhsBloc, KhsState>(
-                  builder: (context, state) {
-                    return state.maybeWhen(
-                      orElse: () {
-                        return const Center(
-                          child: Text("Tarik ke bawah untuk memuat data."),
-                        );
-                      },
-
-                      success: (res) {
-                        return ListView.builder(
-                          itemCount: khsData.length,
-                          itemBuilder: (context, index) {
-                            final semesterData = khsData[index];
-                            return _buildSemesterCard(semesterData);
-                          },
-                        );
-                      },
-                      loading: () {
-                        // Tampilan loading
-                        return const Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SpinKitThreeBounce(
-                                color: Colors.blueAccent,
-                                size: 20.0,
-                              ),
-                              SizedBox(height: 8),
-                              Text("Memuat Data KHS..."),
-                            ],
-                          ),
-                        );
-                      },
-                    );
+        child: BlocBuilder<KhsBloc, KhsState>(
+          builder: (context, state) {
+            return state.maybeWhen(
+              loading:
+                  () => const Center(
+                    child: SpinKitThreeBounce(
+                      color: Colors.blueAccent,
+                      size: 30.0,
+                    ),
+                  ),
+              error:
+                  (message) => Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Text("Gagal memuat data: $message"),
+                    ),
+                  ),
+              // Menggunakan KhsResponseModel di sini
+              success: (response) {
+                final khsData = response.data;
+                if (khsData == null || khsData.isEmpty) {
+                  return const Center(child: Text("Data KHS belum tersedia."));
+                }
+                return ListView.builder(
+                  padding: const EdgeInsets.all(16.0),
+                  itemCount: khsData.length,
+                  itemBuilder: (context, index) {
+                    final semesterData = khsData[index];
+                    return _buildSemesterCard(semesterData);
                   },
-                ),
-              ),
+                );
+              },
+              orElse:
+                  () => const Center(
+                    child: Text("Tarik ke bawah untuk memuat data."),
+                  ),
             );
           },
         ),
@@ -139,133 +75,123 @@ class _KhsPageState extends State<KhsPage> {
     );
   }
 
-  Widget _buildSemesterCard(Map<String, dynamic> semesterData) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      child: Card(
-        color: AppColors.white,
-        elevation: 1,
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+  // Menggunakan model 'Datum'
+  Widget _buildSemesterCard(Datum semesterData) {
+    return Card(
+      color: Colors.white,
+      elevation: 1,
+      shadowColor: Colors.grey[300],
+      margin: const EdgeInsets.only(bottom: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      // Ganti ke antiAlias agar lebih rapi saat ada interaksi
+      clipBehavior: Clip.antiAlias,
+      child: ExpansionTile(
+        // --- TAMBAHKAN DUA BARIS DI BAWAH INI ---
+        shape: const Border(), // Menghilangkan border saat DIBUKA
+        collapsedShape: const Border(), // Menghilangkan border saat DITUTUP
+
+        title: Text(
+          'Semester ${semesterData.semester ?? 'N/A'}',
+          style: const TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+            color: AppColors.black,
+          ),
+        ),
+        subtitle: Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Row(
             children: [
-              Text(
-                'Semester ${semesterData['semester']}',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+              _buildInfoChip(
+                "Total SKS",
+                (semesterData.totalSks ?? 0).toString(),
               ),
-              const SizedBox(height: 8),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Total SKS: ${semesterData['totalSks']}'),
-                  Text('IPS: ${semesterData['ips'].toStringAsFixed(2)}'),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Table(
-                        border: TableBorder.symmetric(
-                          inside: const BorderSide(
-                            color: Colors.grey,
-                            width: 0.3,
-                          ),
-                        ),
-                        columnWidths: const {
-                          0: FixedColumnWidth(50),
-                          1: FlexColumnWidth(),
-                          2: FixedColumnWidth(70),
-                        },
-                        children: [
-                          // Header
-                          TableRow(
-                            decoration: BoxDecoration(color: Colors.blue[200]),
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Center(
-                                  child: Text(
-                                    'No',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Text(
-                                  'Mata Kuliah',
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.all(12),
-                                child: Center(
-                                  child: Text(
-                                    'Nilai',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          // Isi
-                          ...semesterData['daftarMk'].map<TableRow>((item) {
-                            return TableRow(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                border: Border(
-                                  bottom: BorderSide(
-                                    color: Colors.grey,
-                                    width: 0.3,
-                                  ),
-                                ),
-                              ),
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Center(
-                                    child: Text(item['no'] as String),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12.0),
-                                  child: Text(
-                                    item['mataKuliah'] as String,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(12),
-                                  child: Center(child: Text(item['nilai']!)),
-                                ),
-                              ],
-                            );
-                          }),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+              const SizedBox(width: 12),
+              _buildInfoChip(
+                "IPS",
+                (semesterData.ips ?? 0.0).toStringAsFixed(2),
               ),
             ],
           ),
         ),
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+            child: _buildGradeTable(semesterData.daftarMk ?? []),
+          ),
+        ],
       ),
+    );
+  }
+
+  // Menggunakan model 'DaftarMk'
+  Widget _buildGradeTable(List<DaftarMk> daftarMk) {
+    return ClipRRect(
+      child: Table(
+        border: TableBorder(
+          horizontalInside: BorderSide(color: Colors.grey.shade200, width: 1),
+        ),
+        columnWidths: const {
+          0: FlexColumnWidth(), // Kolom untuk Mata Kuliah
+          1: FixedColumnWidth(70), // Kolom untuk Nilai
+        },
+        children: [
+          // Header Tabel
+          TableRow(
+            decoration: BoxDecoration(color: Colors.grey[300]),
+            children: const [
+              Padding(
+                padding: EdgeInsets.all(12),
+                child: Text(
+                  'Mata Kuliah',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Center(
+                child: Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    'Nilai',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          // Isi Tabel
+          ...daftarMk.map((item) {
+            return TableRow(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    item.mataKuliah ?? 'N/A',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(
+                      item.nilai ?? '-',
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+              ],
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoChip(String label, String value) {
+    return Row(
+      children: [
+        Text('$label: ', style: TextStyle(color: Colors.grey[600])),
+        Text(value, style: const TextStyle(fontWeight: FontWeight.bold)),
+      ],
     );
   }
 }
