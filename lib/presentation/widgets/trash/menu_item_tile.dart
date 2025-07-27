@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/assets/assets.gen.dart';
+import 'package:mycic_app/core/assets/assets.gen.dart';
 
 class MenuItemTile extends StatelessWidget {
   final String title;

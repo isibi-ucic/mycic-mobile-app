@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:myapp/data/models/nilai_response_model.dart';
-import 'package:myapp/data/models/transkrip_response_model.dart';
+import 'package:mycic_app/data/models/nilai_response_model.dart';
+import 'package:mycic_app/data/models/transkrip_response_model.dart';
 
 part 'mhs_nilai_event.dart';
 part 'mhs_nilai_state.dart';

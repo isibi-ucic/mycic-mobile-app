@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:myapp/data/datasources/auth_local_datasource.dart';
-import 'package:myapp/data/datasources/auth_remote_datasource.dart';
-import 'package:myapp/data/models/auth_response_model.dart';
+import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
+import 'package:mycic_app/data/datasources/auth_remote_datasource.dart';
+import 'package:mycic_app/data/models/auth_response_model.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

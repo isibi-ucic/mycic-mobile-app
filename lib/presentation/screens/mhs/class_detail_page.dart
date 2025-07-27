@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/core/helper/ms_route.dart';
-import 'package:myapp/data/models/pertemuan_kelas_response_model.dart';
-import 'package:myapp/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
-import 'package:myapp/presentation/screens/mhs/detail_pertemuan_page.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/data/models/pertemuan_kelas_response_model.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
+import 'package:mycic_app/presentation/screens/mhs/detail_pertemuan_page.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class ClassDetailPage extends StatefulWidget {
   final int mkId;
@@ -59,45 +59,77 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
               children: [
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 20,
+                    vertical: 8,
                     horizontal: 8,
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      // --- Judul Mata Kuliah (Paling Utama) ---
                       Text(
-                        widget.namaMatkul ?? '',
+                        widget.namaMatkul ?? 'Nama Mata Kuliah',
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
+                          color: Colors.black87,
                         ),
                       ),
                       const SizedBox(height: 4),
+
+                      // --- Nama Dosen (Info Sekunder) ---
                       Text(
-                        widget.dosen ?? "",
+                        widget.dosen ?? "Nama Dosen Pengampu",
                         style: const TextStyle(
                           color: Colors.black54,
                           fontSize: 14,
+                          fontWeight:
+                              FontWeight
+                                  .w500, // Sedikit tebal agar mudah dibaca
                         ),
                       ),
                       const SizedBox(height: 12),
+
+                      // --- Detail Waktu & Ruangan dengan Ikon ---
                       Row(
                         children: [
+                          // Ikon dan Waktu
+                          Icon(
+                            Icons.access_time_outlined,
+                            color: Colors.blueAccent,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 6),
                           Text(
-                            widget.waktu ?? "",
-                            style: const TextStyle(
+                            widget.waktu ?? "08:00 - 09:40",
+                            style: TextStyle(
+                              color: Colors.grey[700],
                               fontSize: 14,
-                              color: Colors.black87,
                             ),
                           ),
-                          const SizedBox(width: 16),
-                          const Text('|'),
-                          const SizedBox(width: 16),
+
+                          // Pemisah berupa titik
+                          Container(
+                            height: 4,
+                            width: 4,
+                            margin: const EdgeInsets.symmetric(horizontal: 12),
+                            decoration: BoxDecoration(
+                              color: Colors.grey[400],
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+
+                          // Ikon dan Ruangan
+                          Icon(
+                            Icons.location_on_outlined,
+                            color: Colors.blueAccent,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 6),
                           Text(
-                            widget.ruangan ?? '',
-                            style: const TextStyle(
+                            widget.ruangan ?? "LAB-01",
+                            style: TextStyle(
+                              color: Colors.grey[700],
                               fontSize: 14,
-                              color: Colors.black87,
                             ),
                           ),
                         ],
@@ -105,11 +137,7 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 12),
-                  child: const Divider(height: 1),
-                ),
-
+                SizedBox(height: 8),
                 BlocBuilder<MhsKelasBloc, MhsKelasState>(
                   builder: (context, state) {
                     // Tampilkan loading indicator jika statusnya loading
@@ -169,6 +197,7 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(12),
                                 ),
+                                clipBehavior: Clip.antiAlias,
                                 child: Padding(
                                   padding: const EdgeInsets.symmetric(
                                     horizontal: 16,

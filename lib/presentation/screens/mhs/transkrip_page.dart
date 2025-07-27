@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/components/buttons.dart';
-import 'package:myapp/data/models/transkrip_response_model.dart';
-import 'package:myapp/features/bloc/transkrip/transkrip_bloc.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/components/buttons.dart';
+import 'package:mycic_app/data/models/transkrip_response_model.dart';
+import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class TranskripPage extends StatefulWidget {
   const TranskripPage({super.key});

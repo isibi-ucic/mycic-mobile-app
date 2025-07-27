@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/variables.dart';
-import 'package:myapp/data/datasources/auth_local_datasource.dart';
-import 'package:myapp/data/models/presensi_response_model.dart';
-import 'package:myapp/data/models/transkrip_response_model.dart';
-import 'package:myapp/data/models/ujian_response_model.dart';
+import 'package:mycic_app/core/constants/variables.dart';
+import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
+import 'package:mycic_app/data/models/presensi_response_model.dart';
+import 'package:mycic_app/data/models/transkrip_response_model.dart';
+import 'package:mycic_app/data/models/ujian_response_model.dart';
 
 class MhsRemoteDatasource {
   final Dio _dio = Dio();

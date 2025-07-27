@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/core/helper/ms_route.dart';
-import 'package:myapp/data/models/kelas_response_model.dart';
-import 'package:myapp/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
-import 'package:myapp/presentation/screens/mhs/class_detail_page.dart';
-import 'package:myapp/presentation/screens/mhs/template_page.dart';
-import 'package:myapp/presentation/widgets/class_card.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/data/models/kelas_response_model.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_detail_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/template_page.dart';
+import 'package:mycic_app/presentation/widgets/class_card.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class ClassPage extends StatefulWidget {
   const ClassPage({super.key});
@@ -22,7 +22,7 @@ class _ClassPageState extends State<ClassPage> {
   void initState() {
     super.initState();
     // Memuat data saat halaman pertama kali dibuka
-    context.read<MhsKelasBloc>().add(const MhsKelasEvent.getKelas());
+    _loadData();
   }
 
   // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
@@ -86,7 +86,7 @@ class _ClassPageState extends State<ClassPage> {
               }
 
               return ListView.builder(
-                // physics: const AlwaysScrollableScrollPhysics(),
+                physics: const AlwaysScrollableScrollPhysics(),
                 padding: const EdgeInsets.all(16),
                 itemCount:
                     dataHari.length, // ✅ Menggunakan panjang dari List<Datum>

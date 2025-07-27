@@ -1,14 +1,14 @@
 // import 'package:carousel_slider/carousel_slider.dart';
 // import 'package:flutter/material.dart';
-// import 'package:myapp/core/core.dart';
-// import 'package:myapp/presentation/screens/jadwal_page.dart';
-// import 'package:myapp/presentation/screens/profile_page.dart';
-// import 'package:myapp/presentation/screens/transkrip_page.dart';
-// import 'package:myapp/presentation/widgets/all_menu.dart';
-// import 'package:myapp/presentation/screens/class_page.dart';
-// import 'package:myapp/presentation/widgets/header_widget.dart';
-// import 'package:myapp/presentation/widgets/menu_item_tile.dart';
-// import 'package:myapp/presentation/widgets/my_kelas_banner.dart';
+// import 'package:mycic_app/core/core.dart';
+// import 'package:mycic_app/presentation/screens/jadwal_page.dart';
+// import 'package:mycic_app/presentation/screens/profile_page.dart';
+// import 'package:mycic_app/presentation/screens/transkrip_page.dart';
+// import 'package:mycic_app/presentation/widgets/all_menu.dart';
+// import 'package:mycic_app/presentation/screens/class_page.dart';
+// import 'package:mycic_app/presentation/widgets/header_widget.dart';
+// import 'package:mycic_app/presentation/widgets/menu_item_tile.dart';
+// import 'package:mycic_app/presentation/widgets/my_kelas_banner.dart';
 
 // class HomePage extends StatefulWidget {
 //   const HomePage({super.key});

@@ -2,10 +2,10 @@
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:3990274555.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/presentation/screens/dosen/absensi_page.dart';
-import 'package:myapp/presentation/screens/dosen/class_page.dart';
-import 'package:myapp/presentation/screens/dosen/home_page.dart';
-// import 'package:myapp/presentation/screens/scanner_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/absensi_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/class_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/home_page.dart';
+// import 'package:mycic_app/presentation/screens/scanner_page.dart';
 
 import '../../../../core/core.dart';
 

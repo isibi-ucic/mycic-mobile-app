@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/features/bloc/khs/khs_bloc.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class KhsPage extends StatefulWidget {
   const KhsPage({super.key});

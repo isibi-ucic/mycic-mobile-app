@@ -1,11 +1,11 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/assets/assets.dart';
-import 'package:myapp/core/components/buttons.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/presentation/screens/mhs/presensi_manual_page.dart';
-import 'package:myapp/presentation/screens/mhs/template_page.dart';
+import 'package:mycic_app/core/assets/assets.dart';
+import 'package:mycic_app/core/components/buttons.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/presentation/screens/mhs/presensi_manual_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/template_page.dart';
 import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 
 class ScannerPage extends StatefulWidget {
@@ -298,7 +298,7 @@ void _showSuccessDialog(BuildContext context, String code) {
               child: Assets.icons.success.svg(height: 100),
             ),
             Text(
-              'Selamat!',
+              'Presensi Berhasil!',
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),

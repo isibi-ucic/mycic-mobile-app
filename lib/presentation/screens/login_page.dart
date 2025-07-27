@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:myapp/core/core.dart';
-import 'package:myapp/data/datasources/auth_local_datasource.dart';
-import 'package:myapp/features/bloc/auth/auth_bloc.dart';
-import 'package:myapp/presentation/screens/dosen/template_page.dart';
-import 'package:myapp/presentation/screens/mhs/template_page.dart';
+import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
+import 'package:mycic_app/features/bloc/auth/auth_bloc.dart';
+import 'package:mycic_app/presentation/screens/dosen/template_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/template_page.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

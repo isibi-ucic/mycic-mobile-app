@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/data/models/ujian_response_model.dart';
-import 'package:myapp/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/data/models/ujian_response_model.dart';
+import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class UjianPage extends StatefulWidget {
   const UjianPage({super.key});
@@ -100,7 +100,7 @@ class _UjianPageState extends State<UjianPage> {
                                 Text(
                                   item.hari,
                                   style: const TextStyle(
-                                    fontSize: 20,
+                                    fontSize: 18,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -146,7 +146,12 @@ class _UjianPageState extends State<UjianPage> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      subtitle: Text(kelas.jam),
+                                      subtitle: Text(
+                                        kelas.jam,
+                                        style: const TextStyle(
+                                          color: Colors.black87,
+                                        ),
+                                      ),
                                     ),
                                   );
                                 }),

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/features/bloc/auth/auth_bloc.dart';
-import 'package:myapp/features/bloc/info/info_bloc.dart';
-import 'package:myapp/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
-import 'package:myapp/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
-import 'package:myapp/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
-import 'package:myapp/features/bloc/transkrip/transkrip_bloc.dart';
-import 'package:myapp/presentation/screens/splash_page.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/features/bloc/auth/auth_bloc.dart';
+import 'package:mycic_app/features/bloc/info/info_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
+import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
+import 'package:mycic_app/presentation/screens/splash_page.dart';
 
 /// The main entry point of the application.
 ///
@@ -48,16 +48,13 @@ class _MyCicAppState extends State<MyCicApp> {
             color: AppColors.light,
             thickness: 0.5,
           ),
-          textTheme: GoogleFonts.plusJakartaSansTextTheme(
-            Theme.of(context).textTheme,
-          ),
+          textTheme: GoogleFonts.nunitoTextTheme(Theme.of(context).textTheme),
           appBarTheme: AppBarTheme(
             centerTitle: true,
             color: AppColors.white,
             elevation: 0,
-            titleTextStyle: GoogleFonts.kumbhSans(
+            titleTextStyle: GoogleFonts.nunito(
               color: AppColors.black,
-              fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
           ),

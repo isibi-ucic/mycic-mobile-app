@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/core.dart';
-import 'package:myapp/presentation/screens/mhs/class_page.dart';
-import 'package:myapp/presentation/screens/mhs/informasi_page.dart';
-import 'package:myapp/presentation/screens/mhs/jadwal_page.dart';
-import 'package:myapp/presentation/screens/mhs/khs_page.dart';
-import 'package:myapp/presentation/screens/mhs/menus_page.dart';
-import 'package:myapp/presentation/screens/mhs/transkrip_page.dart';
+import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/khs_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/menus_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/transkrip_page.dart';
 
 class AllMenu extends StatelessWidget {
   AllMenu({super.key});

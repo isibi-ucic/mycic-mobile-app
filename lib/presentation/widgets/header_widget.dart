@@ -2,9 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lucide_icons/lucide_icons.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/presentation/screens/mhs/informasi_page.dart';
-import 'package:myapp/presentation/screens/mhs/profile_page.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/profile_page.dart';
 
 class HeaderWidget extends StatelessWidget {
   final String profileImageUrl;
@@ -14,7 +14,7 @@ class HeaderWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 24, 0, 8),
+      padding: const EdgeInsets.fromLTRB(0, 28, 0, 8),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -28,7 +28,7 @@ class HeaderWidget extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                icon: const Icon(LucideIcons.bell),
+                icon: const Icon(LucideIcons.bellDot),
                 onPressed: () {
                   Navigator.push(
                     context,

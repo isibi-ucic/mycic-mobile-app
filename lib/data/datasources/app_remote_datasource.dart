@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/variables.dart';
-import 'package:myapp/data/models/info_response_model.dart';
+import 'package:mycic_app/core/constants/variables.dart';
+import 'package:mycic_app/data/models/info_response_model.dart';
 
 class AppRemoteDatasource {
   final Dio _dio = Dio();

@@ -1,4 +1,4 @@
-import 'package:myapp/data/models/auth_response_model.dart';
+import 'package:mycic_app/data/models/auth_response_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AuthLocalDatasource {
@@ -6,7 +6,7 @@ class AuthLocalDatasource {
   Future<void> saveAuthData(AuthResponseModel data) async {
     // initialize
     final pref = await SharedPreferences.getInstance();
-    
+
     await pref.setString('auth_data', data.toJson());
   }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/components/buttons.dart';
-import 'package:myapp/presentation/widgets/app_bar_with_profile.dart';
+import 'package:mycic_app/core/components/buttons.dart';
+import 'package:mycic_app/presentation/widgets/app_bar_with_profile.dart';
 
 class TranskripPage extends StatelessWidget {
   const TranskripPage({super.key});

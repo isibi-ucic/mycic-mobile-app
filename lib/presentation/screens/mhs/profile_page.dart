@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/components/buttons.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/data/datasources/auth_local_datasource.dart';
-import 'package:myapp/data/models/auth_response_model.dart';
-import 'package:myapp/presentation/screens/login_page.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
-import 'package:myapp/presentation/widgets/simple_underline_button.dart';
+import 'package:mycic_app/core/components/buttons.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
+import 'package:mycic_app/data/models/auth_response_model.dart';
+import 'package:mycic_app/presentation/screens/login_page.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/presentation/widgets/simple_underline_button.dart';
 
 // Perubahan 1: Mengubah StatelessWidget menjadi StatefulWidget
 class ProfilePage extends StatefulWidget {

@@ -1,8 +1,8 @@
 import "package:dartz/dartz.dart";
 import "package:dio/dio.dart";
-import "package:myapp/core/constants/variables.dart";
-import "package:myapp/data/datasources/auth_local_datasource.dart";
-import "package:myapp/data/models/auth_response_model.dart";
+import "package:mycic_app/core/constants/variables.dart";
+import "package:mycic_app/data/datasources/auth_local_datasource.dart";
+import "package:mycic_app/data/models/auth_response_model.dart";
 
 class AuthRemoteDataSource {
   final Dio _dio = Dio();

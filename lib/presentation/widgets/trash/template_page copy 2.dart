@@ -1,8 +1,8 @@
 // import 'package:flutter/material.dart';
-// import 'package:myapp/core/core.dart';
-// import 'package:myapp/presentation/screens/class_page.dart';
-// import 'package:myapp/presentation/screens/home_page.dart';
-// import 'package:myapp/presentation/screens/scanner_page.dart';
+// import 'package:mycic_app/core/core.dart';
+// import 'package:mycic_app/presentation/screens/class_page.dart';
+// import 'package:mycic_app/presentation/screens/home_page.dart';
+// import 'package:mycic_app/presentation/screens/scanner_page.dart';
 
 // class TemplatePage extends StatefulWidget {
 //   const TemplatePage({super.key});

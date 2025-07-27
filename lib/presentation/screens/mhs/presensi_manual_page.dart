@@ -1,8 +1,8 @@
 // manual_presence_page.dart
 import 'package:flutter/material.dart';
-import 'package:myapp/core/components/components.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/components/components.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class PresensiManualPage extends StatefulWidget {
   const PresensiManualPage({super.key});

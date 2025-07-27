@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/assets/assets.gen.dart';
-import 'package:myapp/core/constants/colors.dart';
+import 'package:mycic_app/core/assets/assets.gen.dart';
+import 'package:mycic_app/core/constants/colors.dart';
 
 class MyKelasBanner extends StatelessWidget {
   final String title;
@@ -20,7 +20,8 @@ class MyKelasBanner extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
           // KIRI: Teks dan Button
           Expanded(
@@ -46,13 +47,12 @@ class MyKelasBanner extends StatelessWidget {
                 Text(
                   time,
                   style: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                     color: AppColors.white,
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),
-                const Spacer(),
                 FittedBox(
                   fit: BoxFit.fill,
                   // Supaya button tidak overflow
@@ -69,9 +69,9 @@ class MyKelasBanner extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: const [
-                        Text('Lihat Detail', style: TextStyle(fontSize: 8)),
-                        SizedBox(width: 8),
-                        Icon(Icons.arrow_forward_ios, size: 8),
+                        Text('Lihat Detail', style: TextStyle(fontSize: 10)),
+                        SizedBox(width: 10),
+                        Icon(Icons.arrow_forward_ios, size: 10),
                       ],
                     ),
                   ),

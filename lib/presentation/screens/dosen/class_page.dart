@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/core/helper/ms_route.dart';
-import 'package:myapp/presentation/screens/dosen/class_detail_page.dart';
-import 'package:myapp/presentation/screens/dosen/template_page.dart';
-import 'package:myapp/presentation/widgets/class_card.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/presentation/screens/dosen/class_detail_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/template_page.dart';
+import 'package:mycic_app/presentation/widgets/class_card.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class ClassPage extends StatefulWidget {
   const ClassPage({super.key});

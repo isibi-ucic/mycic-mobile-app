@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/assets/assets.gen.dart';
-import 'package:myapp/core/constants/colors.dart';
+import 'package:mycic_app/core/assets/assets.gen.dart';
+import 'package:mycic_app/core/constants/colors.dart';
 
 class MenuItem {
   final String title;

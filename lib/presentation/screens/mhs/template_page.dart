@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:myapp/presentation/screens/mhs/class_page.dart';
-import 'package:myapp/presentation/screens/mhs/home_page.dart';
-import 'package:myapp/presentation/screens/mhs/scanner_page.dart';
-// import 'package:myapp/presentation/screens/scanner_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/home_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/scanner_page.dart';
+// import 'package:mycic_app/presentation/screens/scanner_page.dart';
 
 import '../../../../core/core.dart';
 

@@ -1,18 +1,18 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:myapp/core/core.dart';
-import 'package:myapp/core/helper/ms_route.dart';
-import 'package:myapp/presentation/screens/mhs/absensi_page.dart';
-import 'package:myapp/presentation/screens/mhs/informasi_page.dart';
-import 'package:myapp/presentation/screens/mhs/jadwal_page.dart';
-import 'package:myapp/presentation/screens/mhs/khs_page.dart';
-import 'package:myapp/presentation/screens/mhs/skripsi_page.dart';
-import 'package:myapp/presentation/screens/mhs/transkrip_page.dart';
-import 'package:myapp/presentation/screens/mhs/class_page.dart';
-import 'package:myapp/presentation/screens/mhs/tugas_page.dart';
-import 'package:myapp/presentation/screens/mhs/ujian_page.dart';
-import 'package:myapp/presentation/widgets/header_widget.dart';
-import 'package:myapp/presentation/widgets/my_kelas_banner.dart';
+import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/presentation/screens/mhs/absensi_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/khs_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/skripsi_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/transkrip_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/tugas_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/ujian_page.dart';
+import 'package:mycic_app/presentation/widgets/header_widget.dart';
+import 'package:mycic_app/presentation/widgets/my_kelas_banner.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

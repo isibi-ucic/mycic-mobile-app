@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/colors.dart';
+import 'package:mycic_app/core/constants/colors.dart';
 
 class SimpleUnderlineButton extends StatelessWidget {
   final String title;

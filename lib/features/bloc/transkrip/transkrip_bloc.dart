@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:myapp/data/datasources/mhs_remote_datasource.dart';
-import 'package:myapp/data/models/transkrip_response_model.dart';
+import 'package:mycic_app/data/datasources/mhs_remote_datasource.dart';
+import 'package:mycic_app/data/models/transkrip_response_model.dart';
 
 part 'transkrip_event.dart';
 part 'transkrip_state.dart';

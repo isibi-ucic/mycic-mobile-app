@@ -1,5 +1,5 @@
-name: myapp
-description: "A new Flutter project."
+name: mycic_app
+description: "Aplikasi MyCIC berbasis mobile Android"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -55,10 +55,18 @@ dependencies:
   equatable: ^2.0.5
   flutter_cached_pdfview: ^0.4.3
   mobile_scanner: ^7.0.0
+  build_runner: ^2.6.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_lints: ^3.0.1
+  flutter_launcher_icons: ^0.13.1
+  change_app_package_name: ^1.1.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icons/logo.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -70,7 +78,7 @@ dev_dependencies:
   build_runner:
   freezed: 2.5.2
   flutter_gen_runner:
-  flutter_launcher_icons: "any"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

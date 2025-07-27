@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:myapp/core/core.dart';
-import 'package:myapp/presentation/screens/mhs/class_page.dart';
-import 'package:myapp/presentation/screens/mhs/home_page.dart';
-import 'package:myapp/presentation/screens/mhs/scanner_page.dart';
+import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/home_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/scanner_page.dart';
 
 class TemplatePage extends StatefulWidget {
   const TemplatePage({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/presentation/screens/mhs/jadwal_page.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
-import 'package:myapp/presentation/widgets/tugas_card.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/presentation/widgets/tugas_card.dart';
 
 class TugasPage extends StatelessWidget {
   TugasPage({super.key});

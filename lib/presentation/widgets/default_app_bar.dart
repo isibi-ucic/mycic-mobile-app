@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/colors.dart';
+import 'package:mycic_app/core/constants/colors.dart';
 
 class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -27,7 +27,7 @@ class DefaultAppBar extends StatelessWidget implements PreferredSizeWidget {
             onPressed: () {
               if (onTapBack == null) {
                 Navigator.of(context).pop();
-              }else{
+              } else {
                 onTapBack!();
               }
             },

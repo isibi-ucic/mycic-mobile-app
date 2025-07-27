@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:myapp/data/datasources/app_remote_datasource.dart';
-import 'package:myapp/data/models/info_response_model.dart';
+import 'package:mycic_app/data/datasources/app_remote_datasource.dart';
+import 'package:mycic_app/data/models/info_response_model.dart';
 
 part 'info_event.dart';
 part 'info_state.dart';

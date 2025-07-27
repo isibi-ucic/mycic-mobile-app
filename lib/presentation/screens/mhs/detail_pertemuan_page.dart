@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/components/buttons.dart';
-import 'package:myapp/core/constants/colors.dart';
-import 'package:myapp/core/helper/ms_route.dart';
-import 'package:myapp/presentation/screens/mhs/template_page.dart';
-import 'package:myapp/presentation/widgets/default_app_bar.dart';
+import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class DetailPertemuanPage extends StatelessWidget {
   const DetailPertemuanPage({super.key});
@@ -19,76 +16,85 @@ class DetailPertemuanPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              // --- BAGIAN HEADER ---
+              // Judul Utama
+              const Text(
                 "Materi Perkuliahan disini",
-                textAlign: TextAlign.left,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
-              Wrap(
-                spacing: 8,
-                children: [
-                  Text(
-                    "Dosen CIC, M.Kom",
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-                  const Text('|', style: TextStyle(color: Colors.black26)),
-                  Text(
-                    "Rabu, 9:00 - 11:00",
-                    style: const TextStyle(color: Colors.black54),
-                  ),
-                  const Text('|', style: TextStyle(color: Colors.black26)),
-                  Text("201", style: const TextStyle(color: Colors.black54)),
-                ],
-              ),
-              SizedBox(height: 16),
-              // ClipRRect(
-              //   borderRadius: BorderRadius.circular(12),
-              //   child: Container(
-              //     color: Colors.grey[300], // background saat loading/error
-              //     height: 200, // Atur sesuai kebutuhan tampilan
-              //     width: double.infinity,
-              //     child: const PDF().cachedFromUrl(
-              //       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-              //       placeholder:
-              //           (progress) => Center(
-              //             child: CircularProgressIndicator(value: progress / 100),
-              //           ),
-              //       errorWidget:
-              //           (error) => Center(child: Text('Gagal memuat PDF')),
-              //     ),
-              //   ),
-              // ),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Container(
-                  color: Colors.grey[300],
-                  child: const SizedBox(
-                    height: 200,
-                    child: Center(child: Text('PDF View')),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 16),
 
-              // SizedBox(height: 200, child: Center(child: Text('PDF View'))),
-              SizedBox(height: 16),
-              Text(
-                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                textAlign: TextAlign.justify,
-                style: const TextStyle(fontSize: 16),
+              // // Info Detail dengan Ikon
+              // _buildInfoRow(
+              //   icon: Icons.person_outline,
+              //   text: "Dosen CIC, M.Kom",
+              // ),
+              // const SizedBox(height: 8),
+              // _buildInfoRow(
+              //   icon: Icons.access_time_outlined,
+              //   text: "Rabu, 9:00 - 11:00",
+              // ),
+              // const SizedBox(height: 8),
+              // _buildInfoRow(
+              //   icon: Icons.location_on_outlined,
+              //   text: "Ruang 201",
+              // ),
+              // const SizedBox(height: 24),
+
+              // --- BAGIAN KONTEN DALAM CARD ---
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                child: Column(
+                  children: [
+                    // Placeholder untuk PDF Viewer
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        color: Colors.grey[400],
+                        height: 200,
+                        child: Center(
+                          child: Icon(
+                            Icons.picture_as_pdf_rounded,
+                            color: Colors.grey[500],
+                            size: 50,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Deskripsi Materi
+                    const Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 15,
+                        height: 1.5,
+                        color: Colors.black54,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-              SizedBox(height: 16),
-              Button.filled(
-                label: "Scan Absensi",
-                color: AppColors.primary,
-                onPressed: () {
-                  msRoute(context, const TemplateMhsPage());
-                },
-                height: 45,
-                fontSize: 16,
+              const SizedBox(height: 24),
+
+              // --- BAGIAN TOMBOL AKSI ---
+              SizedBox(
+                width: double.infinity, // Membuat tombol full-width
+                child: FilledButton.icon(
+                  icon: const Icon(Icons.qr_code_scanner),
+                  label: const Text("Scan Absensi"),
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    textStyle: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  onPressed: () {
+                    // Ganti dengan navigasi Anda
+                    // msRoute(context, const ScannerPage());
+                  },
+                ),
               ),
             ],
           ),
@@ -96,4 +102,15 @@ class DetailPertemuanPage extends StatelessWidget {
       ),
     );
   }
+}
+
+// Helper widget untuk membuat baris info dengan ikon
+Widget _buildInfoRow({required IconData icon, required String text}) {
+  return Row(
+    children: [
+      Icon(icon, color: Colors.blueAccent, size: 20),
+      const SizedBox(width: 12),
+      Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
+    ],
+  );
 }

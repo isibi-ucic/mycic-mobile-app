@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/core/core.dart';
-import 'package:myapp/data/datasources/auth_local_datasource.dart';
-import 'package:myapp/presentation/screens/login_page.dart';
-import 'package:myapp/presentation/screens/mhs/template_page.dart';
+import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
+import 'package:mycic_app/presentation/screens/login_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/template_page.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({super.key});
@@ -58,14 +58,13 @@ class _SplashPageState extends State<SplashPage> {
                         .center, // Aligns children horizontally centered
                 children: [
                   Assets.icons.logo.svg(height: 100),
-                  const SizedBox(height: 5),
+                  const SizedBox(height: 12),
                   const Text(
                     'MyCIC Mobile App',
                     style: TextStyle(
                       color: AppColors.primary,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
-                      fontFamily: 'Plus Jakarta Sans',
                     ),
                   ),
                 ],

@@ -1,7 +1,7 @@
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:4239444231.
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:2081660647.
 import 'package:flutter/material.dart';
-import 'package:myapp/core/constants/colors.dart';
+import 'package:mycic_app/core/constants/colors.dart';
 
 class TugasCard extends StatelessWidget {
   final String judul;
@@ -34,11 +34,6 @@ class TugasCard extends StatelessWidget {
               judul,
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
             ),
-            // const SizedBox(height: 4),
-            // Text(
-            //   kelas,
-            //   style: const TextStyle(color: Colors.black54, fontSize: 14),
-            // ),
             const Divider(height: 24),
             const Text(
               'Tenggat waktu',
@@ -60,10 +55,10 @@ class TugasCard extends StatelessWidget {
                 label: const Text('Submit'),
                 style: OutlinedButton.styleFrom(
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(16),
                   ),
-                  side: const BorderSide(color: Colors.black26),
-                  foregroundColor: Colors.black,
+                  side: const BorderSide(color: Colors.blueAccent),
+                  foregroundColor: Colors.blueAccent,
                 ),
               ),
             ),
