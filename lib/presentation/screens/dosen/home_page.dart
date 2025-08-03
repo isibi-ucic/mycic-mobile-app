@@ -25,12 +25,12 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     int current = 0; // di dalam StatefulWidget
-    final List<Widget> bannerItems = [
-      // Salin isi Container kamu di sini 3x, atau generate dinamis
-      MyKelasBanner(title: 'Pemrograman Internet', time: '14:00'),
-      MyKelasBanner(title: 'Struktur Data', time: '09:00'),
-      MyKelasBanner(title: 'Basis Data', time: '11:00'),
-    ];
+    // final List<Widget> bannerItems = [
+    //   // Salin isi Container kamu di sini 3x, atau generate dinamis
+    //   MyKelasBanner(title: 'Pemrograman Internet', time: '14:00'),
+    //   MyKelasBanner(title: 'Struktur Data', time: '09:00'),
+    //   MyKelasBanner(title: 'Basis Data', time: '11:00'),
+    // ];
 
     final menuItems = [
       {
@@ -101,38 +101,20 @@ class _HomePageState extends State<HomePage> {
             // Banner
             Column(
               children: [
-                CarouselSlider(
-                  items: bannerItems,
-                  options: CarouselOptions(
-                    height: 150, // sesuaikan
-                    enlargeCenterPage: true,
-                    autoPlay: true,
-                    viewportFraction: 1,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        current = index;
-                      });
-                    },
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(bannerItems.length, (index) {
-                    return Container(
-                      width: 8.0,
-                      height: 8.0,
-                      margin: const EdgeInsets.symmetric(horizontal: 4.0),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color:
-                            current == index
-                                ? AppColors.primary
-                                : Colors.grey[300],
-                      ),
-                    );
-                  }),
-                ),
+                // CarouselSlider(
+                //   items: bannerItems,
+                //   options: CarouselOptions(
+                //     height: 150, // sesuaikan
+                //     enlargeCenterPage: true,
+                //     autoPlay: true,
+                //     viewportFraction: 1,
+                //     onPageChanged: (index, reason) {
+                //       setState(() {
+                //         current = index;
+                //       });
+                //     },
+                //   ),
+                // ),
               ],
             ),
 

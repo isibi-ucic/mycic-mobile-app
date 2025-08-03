@@ -2,69 +2,142 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 import 'package:mycic_app/presentation/widgets/tugas_card.dart';
+import 'package:mycic_app/data/models/mhs_tugas_response_model.dart';
 
-class TugasPage extends StatelessWidget {
-  TugasPage({super.key});
+class TugasPage extends StatefulWidget {
+  const TugasPage({super.key});
 
-  final tugasItem = [
-    {
-      'title': 'Tugas Matematika P7',
-      'date': '20 Agustus 2023',
-      'dosen': 'Dosen. S.Pd., M.Si',
-      'page': JadwalPage(),
-    },
-    {
-      'title': 'Tugas Biologi P5',
-      'date': '11 Agustus 2023',
-      'dosen': 'Dosen. S.Pd., M.Si',
-      'page': JadwalPage(),
-    },
-    {
-      'title': 'Tugas Kalkulus Dasar P5',
-      'date': '12 Agustus 2023',
-      'dosen': 'Dosen. S.Pd., M.Si',
-      'page': JadwalPage(),
-    },
-  ];
+  @override
+  State<TugasPage> createState() => _TugasPageState();
+}
+
+class _TugasPageState extends State<TugasPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Panggil fungsi untuk mengambil data saat widget pertama kali dibuat
+    _loadData();
+  }
+
+  // Buat fungsi untuk handle aksi refresh
+  Future<void> _loadData() async {
+    context.read<MhsTugasBloc>().add(const MhsTugasEvent.fetch());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: DefaultAppBar(title: 'Tugas Perkuliahan'),
       backgroundColor: AppColors.bgDefault,
-      body: ListView.builder(
-        padding: const EdgeInsets.all(16),
-        itemCount: tugasItem.length,
-        itemBuilder: (context, index) {
-          final item = tugasItem[index];
-          return TugasCard(
-            judul: item['title'] as String,
-            tenggat: item['date'] as String,
-            pengajar: item['dosen'] as String,
-            onSubmit: () {
-              // Navigasi atau aksi submit
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: BlocBuilder<MhsTugasBloc, MhsTugasState>(
+            builder: (context, state) {
+              debugPrint('state: $state');
+              return state.when(
+                initial: () => const Center(child: CircularProgressIndicator()),
+                loading: () => const Center(child: CircularProgressIndicator()),
 
-              // tampil popup upload file tugas dan komentar
-              showModalBottomSheet(
-                context: context,
-                isScrollControlled: true,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                builder:
-                    (ctx) =>
-                        _SubmissionSheet(judulTugas: item['title'] as String),
+                // PERBAIKI TAMPILAN ERROR
+                error:
+                    (message) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 64,
+                        horizontal: 16,
+                      ),
+                      child: Center(child: Text(message)),
+                    ),
+
+                success: (res) {
+                  final List<Datum> tugas = res.data ?? [];
+
+                  if (tugas.isEmpty) {
+                    // Anda bisa menambahkan widget empty state di sini jika mau
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(32.0),
+                        child: Text('Tidak ada tugas saat ini.'),
+                      ),
+                    );
+                  }
+
+                  // PERBAIKI LISTVIEW
+                  return ListView.builder(
+                    padding: const EdgeInsets.all(16),
+                    // WAJIB TAMBAHKAN DUA PROPERTI INI
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: tugas.length,
+                    itemBuilder: (context, index) {
+                      final item = tugas[index];
+                      return TugasCard(
+                        // GUNAKAN ?? UNTUK NULL SAFETY
+                        judul: item.judulTugas ?? 'Tanpa Judul',
+                        tenggat: item.batasWaktu.toString(),
+                        // GANTI DENGAN PROPERTI YANG BENAR DARI MODEL ANDA
+                        pengajar: 'Tanpa Nama Pengajar',
+                        onSubmit: () {
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(20),
+                              ),
+                            ),
+                            builder:
+                                (ctx) => _SubmissionSheet(
+                                  judulTugas: item.judulTugas ?? 'Tanpa Judul',
+                                ),
+                          );
+                        },
+                      );
+                    },
+                  );
+                },
               );
             },
-          );
-        },
+          ),
+        ),
       ),
     );
   }
 }
+
+// class TugasPage extends StatelessWidget {
+//   TugasPage({super.key});
+
+//   // final tugasItem = [
+//   //   {
+//   //     'title': 'Tugas Matematika P7',
+//   //     'date': '20 Agustus 2023',
+//   //     'dosen': 'Dosen. S.Pd., M.Si',
+//   //     'page': JadwalPage(),
+//   //   },
+//   //   {
+//   //     'title': 'Tugas Biologi P5',
+//   //     'date': '11 Agustus 2023',
+//   //     'dosen': 'Dosen. S.Pd., M.Si',
+//   //     'page': JadwalPage(),
+//   //   },
+//   //   {
+//   //     'title': 'Tugas Kalkulus Dasar P5',
+//   //     'date': '12 Agustus 2023',
+//   //     'dosen': 'Dosen. S.Pd., M.Si',
+//   //     'page': JadwalPage(),
+//   //   },
+//   // ];
+//   @override
+
+// }
 
 // Widget untuk konten di dalam Bottom Sheet
 class _SubmissionSheet extends StatefulWidget {

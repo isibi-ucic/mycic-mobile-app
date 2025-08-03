@@ -9,7 +9,7 @@ part 'mhs_ujian_bloc.freezed.dart';
 
 class MhsUjianBloc extends Bloc<MhsUjianEvent, MhsUjianState> {
   MhsUjianBloc() : super(_Initial()) {
-    on<MhsUjianEvent>((event, emit) async {
+    on<_Fetch>((event, emit) async {
       emit(const _Loading());
 
       final response = await MhsRemoteDatasource().getUjian();

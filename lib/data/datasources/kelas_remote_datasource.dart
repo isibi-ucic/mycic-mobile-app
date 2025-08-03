@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:mycic_app/core/constants/variables.dart';
 import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
 import 'package:mycic_app/data/models/kelas_response_model.dart';
-import 'package:mycic_app/data/models/kelas_today_response_model.dart';
+import 'package:mycic_app/data/models/mhs_kelas_today_response_model.dart';
+import 'package:mycic_app/data/models/mhs_tugas_response_model.dart';
 import 'package:mycic_app/data/models/pertemuan_kelas_response_model.dart';
 
 class KelasRemoteDatasource {
@@ -75,20 +76,55 @@ class KelasRemoteDatasource {
     }
   }
 
-  Future<Either<String, KelasTodayResponseModel>> getKelasTodayMhs(
-    int mkId,
-  ) async {
-    final url = '${Variables.baseUrl}/mhs/kelas/today';
+  Future<Either<String, MhsKelasTodayResponseModel>> getKelasTodayMhs() async {
+    const url = '${Variables.baseUrl}/mhs/kelas/today';
+    final authData = await AuthLocalDatasource().getAuthData();
+
+    debugPrint('authData: ${authData?.user.userNumber}');
     try {
       final response = await _dio.get(
         url,
-        queryParameters: {'id_jadwal_kelas': mkId},
+        queryParameters: {'nim': authData?.user.userNumber},
         options: Options(headers: {'Accept': 'application/json'}),
       );
 
       debugPrint('response: $response');
       if (response.statusCode == 200) {
-        return Right(KelasTodayResponseModel.fromMap(response.data));
+        return Right(MhsKelasTodayResponseModel.fromMap(response.data));
+      } else {
+        return const Left('Data tidak ditemukan!');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print('Underlying error: ${e.error}');
+
+        if (e.response != null) {
+          final errorResponse = e.response!.data;
+          if (errorResponse != null && errorResponse['message'] != null) {
+            return Left(errorResponse['message']);
+          }
+        }
+      }
+      return Left('Network error'); // or a more specific error message
+    }
+  }
+
+  Future<Either<String, MhsTugasResponseModel>> getTugasMhs() async {
+    final url = '${Variables.baseUrl}/mhs/kelas/tugas';
+    final authData = await AuthLocalDatasource().getAuthData();
+
+    debugPrint('authData tugas: ${url}');
+    try {
+      final response = await _dio.get(
+        url,
+        queryParameters: {'nim': authData?.user.userNumber},
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+
+      debugPrint('response tugas: $response');
+
+      if (response.statusCode == 200) {
+        return Right(MhsTugasResponseModel.fromMap(response.data));
       } else {
         return const Left('Data tidak ditemukan!');
       }

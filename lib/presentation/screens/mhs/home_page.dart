@@ -1,12 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/core.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
 import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
 import 'package:mycic_app/data/models/auth_response_model.dart';
+import 'package:mycic_app/data/models/mhs_tugas_response_model.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/presentation/screens/mhs/absensi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
-import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/khs_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/skripsi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/transkrip_page.dart';
@@ -42,6 +45,9 @@ class _HomePageState extends State<HomePage> {
 
   // Buat fungsi untuk handle aksi refresh
   Future<void> _loadData() async {
+    // Pemicu event BLoC ditambahkan di sini agar ikut refresh
+    context.read<MhsKelasTodayBloc>().add(const MhsKelasTodayEvent.fetch());
+    context.read<MhsTugasBloc>().add(const MhsTugasEvent.fetch());
     // Panggil setState untuk memberitahu Flutter agar membangun ulang widget
     // dengan Future yang baru (memuat ulang data)
     setState(() {
@@ -51,13 +57,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final List<Widget> bannerItems = [
-      // Salin isi Container kamu di sini 3x, atau generate dinamis
-      MyKelasBanner(title: 'Pemrograman Internet', time: '14:00 - 16:00'),
-      MyKelasBanner(title: 'Struktur Data', time: '09:00 - 11:00'),
-      MyKelasBanner(title: 'Basis Data', time: '11:00 - 13:00'),
-    ];
-
     final menuItems = [
       {
         'title': 'Kelas',
@@ -89,36 +88,20 @@ class _HomePageState extends State<HomePage> {
       {'title': 'Semua', 'icon': Assets.images.menu.semua, 'page': ClassPage()},
     ];
 
-    final tugasItem = [
-      {
-        'title': 'Tugas Matematika P7',
-        'date': '20 Agustus 2023',
-        'page': JadwalPage(),
-      },
-      {
-        'title': 'Tugas Biologi P5',
-        'date': '11 Agustus 2023',
-        'page': JadwalPage(),
-      },
-      {
-        'title': 'Tugas Kalkulus Dasar P5',
-        'date': '12 Agustus 2023',
-        'page': JadwalPage(),
-      },
-    ];
-
     return Scaffold(
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: RefreshIndicator(
-          onRefresh: _loadData,
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(
+            parent: AlwaysScrollableScrollPhysics(),
+          ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: FutureBuilder<AuthResponseModel?>(
-                  future: AuthLocalDatasource().getAuthData(),
+                  future: _profileFuture,
                   builder: (context, snapshot) {
                     // • Waiting → placeholder
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -134,12 +117,14 @@ class _HomePageState extends State<HomePage> {
                     // • Ambil email jika ada
                     final nim = snapshot.data?.user.userNumber ?? '';
 
+                    // user info
+                    final userInfo = snapshot.data?.user.userInfo ?? '';
+
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         HeaderWidget(
-                          profileImageUrl:
-                              'https://my.cic.ac.id/portal/files/fotostudent/$nim.jpg',
+                          profileImageUrl: snapshot.data?.user.profile ?? '',
                         ),
                         Text(
                           'Halo, $nama 👋',
@@ -148,27 +133,67 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const Text(
-                          'Teknik Informatika - IV',
-                          style: TextStyle(fontSize: 16),
-                        ),
+                        Text(userInfo, style: TextStyle(fontSize: 16)),
                       ],
                     );
                   },
                 ),
               ),
               // Banner
-              CarouselSlider(
-                items: bannerItems,
-                options: CarouselOptions(
-                  height: 155,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  viewportFraction: 0.92,
-                  scrollPhysics: const BouncingScrollPhysics(),
-                ),
+              // -- UBAH BAGIAN BANNER --
+              // Banner dinamis dari BLoC
+              BlocBuilder<MhsKelasTodayBloc, MhsKelasTodayState>(
+                builder: (context, state) {
+                  return state.when(
+                    initial: () => const BannerSkeleton(),
+                    loading: () => const BannerSkeleton(),
+                    error:
+                        (message) => SizedBox(
+                          height: 155,
+                          child: Center(child: Text(message)),
+                        ),
+                    success: (res) {
+                      // Ubah data model menjadi list widget
+                      if (res.data.isEmpty) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: MyKelasBanner(
+                            mkId: 0,
+                            title: 'Rehat sejenak',
+                            time: '--',
+                            ruangan: '',
+                            dosen: '',
+                            adakelas: false,
+                          ),
+                        );
+                      }
+
+                      final bannerItems =
+                          res.data.map((kelas) {
+                            return MyKelasBanner(
+                              mkId: kelas.idJadwalKelas,
+                              title: kelas.mataKuliah,
+                              time: kelas.jam,
+                              ruangan: kelas.ruang,
+                              dosen: kelas.dosen,
+                            );
+                          }).toList();
+
+                      return CarouselSlider(
+                        items: bannerItems,
+                        options: CarouselOptions(
+                          height: 155,
+                          enlargeCenterPage: true,
+                          autoPlay: true,
+                          viewportFraction: 0.92,
+                          scrollPhysics: const BouncingScrollPhysics(),
+                        ),
+                      );
+                    },
+                  );
+                },
               ),
-              SizedBox(height: 12),
+              const SizedBox(height: 12),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: GridView.builder(
@@ -265,53 +290,73 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ],
                     ),
-                    ListView.builder(
-                      padding: const EdgeInsets.only(top: 12),
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: tugasItem.length,
-                      itemBuilder: (context, index) {
-                        final tugas = tugasItem[index];
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              msRoute(context, TugasPage());
-                            },
-                            child: Card(
-                              elevation: 1,
-                              color: AppColors.white,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                    BlocBuilder<MhsTugasBloc, MhsTugasState>(
+                      builder: (context, state) {
+                        debugPrint('state: $state');
+                        return state.when(
+                          initial: () => const TugasListSkeleton(),
+                          loading: () => const TugasListSkeleton(),
+                          error:
+                              (message) => SizedBox(
+                                height: 155,
+                                child: Center(child: Text(message)),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      tugas['title'] as String,
-                                      style: const TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
+                          success: (res) {
+                            final List<Datum> tugas =
+                                (res.data ?? []).take(5).toList();
+                            return ListView.builder(
+                              padding: const EdgeInsets.only(top: 12),
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: tugas.length,
+                              itemBuilder: (context, index) {
+                                final item = tugas[index];
+                                return Padding(
+                                  padding: const EdgeInsets.only(bottom: 8.0),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      msRoute(context, TugasPage());
+                                    },
+                                    child: Card(
+                                      elevation: 1,
+                                      color: AppColors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(16),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              item?.judulTugas ?? '',
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              'Due date : ${item?.batasWaktu.toString()}',
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
-                                    Text(
-                                      'Due date : ${tugas['date']}',
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.black54,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
                         );
                       },
                     ),
+
                     SizedBox(height: 24),
                   ],
                 ),
@@ -332,5 +377,102 @@ class HeaderSkeleton extends StatelessWidget {
   Widget build(BuildContext context) {
     // Gunakan struktur Column yang sama persis
     return SizedBox(height: 160);
+  }
+}
+
+// -- TAMBAHKAN --
+// Widget placeholder untuk banner saat loading
+class BannerSkeleton extends StatelessWidget {
+  const BannerSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CarouselSlider(
+      items: [
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 8),
+          decoration: BoxDecoration(
+            color: Colors.black12,
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ],
+      options: CarouselOptions(
+        height: 155,
+        enlargeCenterPage: true,
+        viewportFraction: 0.92,
+      ),
+    );
+  }
+}
+
+// WIDGET SKELETON UNTUK DAFTAR TUGAS
+class TugasListSkeleton extends StatelessWidget {
+  const TugasListSkeleton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: 3, // Tampilkan 3 item placeholder
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(top: 12),
+      itemBuilder:
+          (context, index) => Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Card(
+              elevation: 1,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 16,
+                      width: double.infinity,
+                      color: Colors.black12,
+                    ),
+                    const SizedBox(height: 8),
+                    Container(height: 12, width: 150, color: Colors.black12),
+                  ],
+                ),
+              ),
+            ),
+          ),
+    );
+  }
+}
+
+// WIDGET UNTUK MENAMPILKAN JIKA TIDAK ADA TUGAS
+class EmptyTugasWidget extends StatelessWidget {
+  const EmptyTugasWidget({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Padding(
+      padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
+      child: Center(
+        child: Column(
+          children: [
+            // Ganti dengan gambar/ilustrasi Anda jika ada
+            Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
+            SizedBox(height: 16),
+            Text(
+              'Tidak Ada Tugas!',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 4),
+            Text(
+              'Semua tugas sudah selesai. Kerja bagus!',
+              textAlign: TextAlign.center,
+              style: TextStyle(color: Colors.black54),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

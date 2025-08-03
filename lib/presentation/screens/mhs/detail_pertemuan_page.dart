@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:mycic_app/core/components/buttons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/presentation/screens/mhs/scanner_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
 class DetailPertemuanPage extends StatelessWidget {
@@ -80,20 +83,14 @@ class DetailPertemuanPage extends StatelessWidget {
               // --- BAGIAN TOMBOL AKSI ---
               SizedBox(
                 width: double.infinity, // Membuat tombol full-width
-                child: FilledButton.icon(
-                  icon: const Icon(Icons.qr_code_scanner),
-                  label: const Text("Scan Absensi"),
-                  style: FilledButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                    textStyle: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                child: Button.filled(
+                  color: AppColors.primary,
+
                   onPressed: () {
-                    // Ganti dengan navigasi Anda
-                    // msRoute(context, const ScannerPage());
+                    msRoute(context, const ScannerPage());
                   },
+                  label: 'Scan Presensi',
+                  icon: const Icon(Icons.qr_code_scanner, color: Colors.white),
                 ),
               ),
             ],

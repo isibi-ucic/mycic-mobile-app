@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:mycic_app/core/assets/assets.gen.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
+import 'package:mycic_app/presentation/screens/mhs/class_detail_page.dart';
 
 class MyKelasBanner extends StatelessWidget {
+  final int mkId;
   final String title;
   final String time;
+  final String dosen;
+  final String ruangan;
+  final bool adakelas;
 
-  const MyKelasBanner({super.key, required this.title, required this.time});
+  MyKelasBanner({
+    super.key,
+    required this.title,
+    required this.time,
+    required this.mkId,
+    required this.dosen,
+    required this.ruangan,
+    this.adakelas = true,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,8 +44,8 @@ class MyKelasBanner extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Kelas Hari Ini',
+                Text(
+                  adakelas ? 'Kelas Hari Ini' : 'Tidak ada kelas hari ini',
                   style: TextStyle(fontSize: 16, color: AppColors.white),
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -65,11 +80,28 @@ class MyKelasBanner extends StatelessWidget {
                       backgroundColor: AppColors.white,
                       foregroundColor: AppColors.black,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      adakelas
+                          ? msRoute(
+                            context,
+                            ClassDetailPage(
+                              mkId: mkId,
+                              namaMatkul:
+                                  title, // Memberikan nilai default jika null
+                              dosen: dosen,
+                              waktu: time,
+                              ruangan: ruangan,
+                            ),
+                          )
+                          : msRoute(context, ClassPage());
+                    },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Text('Lihat Detail', style: TextStyle(fontSize: 10)),
+                      children: [
+                        Text(
+                          adakelas ? 'Lihat Detail' : 'Lihat Jadwal',
+                          style: TextStyle(fontSize: 10),
+                        ),
                         SizedBox(width: 10),
                         Icon(Icons.arrow_forward_ios, size: 10),
                       ],

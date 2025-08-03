@@ -48,7 +48,6 @@ class AuthRemoteDataSource {
   }
 
   Future<Either<String, String>> logout() async {
-    final authData = await AuthLocalDatasource().getAuthData();
     final url = '${Variables.baseUrl}/logout';
 
     try {

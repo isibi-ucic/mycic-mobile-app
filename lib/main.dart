@@ -6,7 +6,10 @@ import 'package:mycic_app/features/bloc/auth/auth_bloc.dart';
 import 'package:mycic_app/features/bloc/info/info_bloc.dart';
 import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas_detail/mhs_kelas_detail_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
 import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
 import 'package:mycic_app/presentation/screens/splash_page.dart';
@@ -39,6 +42,9 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => TranskripBloc()),
         BlocProvider(create: (context) => MhsUjianBloc()),
         BlocProvider(create: (context) => KhsBloc()),
+        BlocProvider(create: (context) => MhsKelasTodayBloc()),
+        BlocProvider(create: (context) => MhsKelasDetailBloc()),
+        BlocProvider(create: (context) => MhsTugasBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

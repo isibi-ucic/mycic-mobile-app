@@ -12,7 +12,8 @@ part of 'mhs_nilai_bloc.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
+  'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models',
+);
 
 /// @nodoc
 mixin _$MhsNilaiEvent {
@@ -21,52 +22,47 @@ mixin _$MhsNilaiEvent {
     required TResult Function() started,
     required TResult Function(String nim) getKHS,
     required TResult Function(String nim) getTranskrip,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? started,
     TResult? Function(String nim)? getKHS,
     TResult? Function(String nim)? getTranskrip,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? started,
     TResult Function(String nim)? getKHS,
     TResult Function(String nim)? getTranskrip,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
     required TResult Function(_Started value) started,
     required TResult Function(_GetKHS value) getKHS,
     required TResult Function(_GetTranskrip value) getTranskrip,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
     TResult? Function(_Started value)? started,
     TResult? Function(_GetKHS value)? getKHS,
     TResult? Function(_GetTranskrip value)? getTranskrip,
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
     TResult Function(_Started value)? started,
     TResult Function(_GetKHS value)? getKHS,
     TResult Function(_GetTranskrip value)? getTranskrip,
     required TResult orElse(),
-  }) =>
-      throw _privateConstructorUsedError;
+  }) => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
 abstract class $MhsNilaiEventCopyWith<$Res> {
   factory $MhsNilaiEventCopyWith(
-          MhsNilaiEvent value, $Res Function(MhsNilaiEvent) then) =
-      _$MhsNilaiEventCopyWithImpl<$Res, MhsNilaiEvent>;
+    MhsNilaiEvent value,
+    $Res Function(MhsNilaiEvent) then,
+  ) = _$MhsNilaiEventCopyWithImpl<$Res, MhsNilaiEvent>;
 }
 
 /// @nodoc
@@ -78,13 +74,17 @@ class _$MhsNilaiEventCopyWithImpl<$Res, $Val extends MhsNilaiEvent>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
 abstract class _$$StartedImplCopyWith<$Res> {
   factory _$$StartedImplCopyWith(
-          _$StartedImpl value, $Res Function(_$StartedImpl) then) =
-      __$$StartedImplCopyWithImpl<$Res>;
+    _$StartedImpl value,
+    $Res Function(_$StartedImpl) then,
+  ) = __$$StartedImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
@@ -92,8 +92,12 @@ class __$$StartedImplCopyWithImpl<$Res>
     extends _$MhsNilaiEventCopyWithImpl<$Res, _$StartedImpl>
     implements _$$StartedImplCopyWith<$Res> {
   __$$StartedImplCopyWithImpl(
-      _$StartedImpl _value, $Res Function(_$StartedImpl) _then)
-      : super(_value, _then);
+    _$StartedImpl _value,
+    $Res Function(_$StartedImpl) _then,
+  ) : super(_value, _then);
+
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -191,8 +195,9 @@ abstract class _Started implements MhsNilaiEvent {
 /// @nodoc
 abstract class _$$GetKHSImplCopyWith<$Res> {
   factory _$$GetKHSImplCopyWith(
-          _$GetKHSImpl value, $Res Function(_$GetKHSImpl) then) =
-      __$$GetKHSImplCopyWithImpl<$Res>;
+    _$GetKHSImpl value,
+    $Res Function(_$GetKHSImpl) then,
+  ) = __$$GetKHSImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String nim});
 }
@@ -202,20 +207,23 @@ class __$$GetKHSImplCopyWithImpl<$Res>
     extends _$MhsNilaiEventCopyWithImpl<$Res, _$GetKHSImpl>
     implements _$$GetKHSImplCopyWith<$Res> {
   __$$GetKHSImplCopyWithImpl(
-      _$GetKHSImpl _value, $Res Function(_$GetKHSImpl) _then)
-      : super(_value, _then);
+    _$GetKHSImpl _value,
+    $Res Function(_$GetKHSImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? nim = null,
-  }) {
-    return _then(_$GetKHSImpl(
-      null == nim
-          ? _value.nim
-          : nim // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? nim = null}) {
+    return _then(
+      _$GetKHSImpl(
+        null == nim
+            ? _value.nim
+            : nim // ignore: cast_nullable_to_non_nullable
+                as String,
+      ),
+    );
   }
 }
 
@@ -243,7 +251,9 @@ class _$GetKHSImpl implements _GetKHS {
   @override
   int get hashCode => Object.hash(runtimeType, nim);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GetKHSImplCopyWith<_$GetKHSImpl> get copyWith =>
@@ -322,7 +332,10 @@ abstract class _GetKHS implements MhsNilaiEvent {
   const factory _GetKHS(final String nim) = _$GetKHSImpl;
 
   String get nim;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetKHSImplCopyWith<_$GetKHSImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -330,8 +343,9 @@ abstract class _GetKHS implements MhsNilaiEvent {
 /// @nodoc
 abstract class _$$GetTranskripImplCopyWith<$Res> {
   factory _$$GetTranskripImplCopyWith(
-          _$GetTranskripImpl value, $Res Function(_$GetTranskripImpl) then) =
-      __$$GetTranskripImplCopyWithImpl<$Res>;
+    _$GetTranskripImpl value,
+    $Res Function(_$GetTranskripImpl) then,
+  ) = __$$GetTranskripImplCopyWithImpl<$Res>;
   @useResult
   $Res call({String nim});
 }
@@ -341,20 +355,23 @@ class __$$GetTranskripImplCopyWithImpl<$Res>
     extends _$MhsNilaiEventCopyWithImpl<$Res, _$GetTranskripImpl>
     implements _$$GetTranskripImplCopyWith<$Res> {
   __$$GetTranskripImplCopyWithImpl(
-      _$GetTranskripImpl _value, $Res Function(_$GetTranskripImpl) _then)
-      : super(_value, _then);
+    _$GetTranskripImpl _value,
+    $Res Function(_$GetTranskripImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
-  $Res call({
-    Object? nim = null,
-  }) {
-    return _then(_$GetTranskripImpl(
-      null == nim
-          ? _value.nim
-          : nim // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
+  $Res call({Object? nim = null}) {
+    return _then(
+      _$GetTranskripImpl(
+        null == nim
+            ? _value.nim
+            : nim // ignore: cast_nullable_to_non_nullable
+                as String,
+      ),
+    );
   }
 }
 
@@ -382,7 +399,9 @@ class _$GetTranskripImpl implements _GetTranskrip {
   @override
   int get hashCode => Object.hash(runtimeType, nim);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$GetTranskripImplCopyWith<_$GetTranskripImpl> get copyWith =>
@@ -461,7 +480,10 @@ abstract class _GetTranskrip implements MhsNilaiEvent {
   const factory _GetTranskrip(final String nim) = _$GetTranskripImpl;
 
   String get nim;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of MhsNilaiEvent
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$GetTranskripImplCopyWith<_$GetTranskripImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -473,7 +495,9 @@ mixin _$MhsNilaiState {
   TranskripResponseModel? get transkrip => throw _privateConstructorUsedError;
   String? get errorMessage => throw _privateConstructorUsedError;
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MhsNilaiState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $MhsNilaiStateCopyWith<MhsNilaiState> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -481,14 +505,16 @@ mixin _$MhsNilaiState {
 /// @nodoc
 abstract class $MhsNilaiStateCopyWith<$Res> {
   factory $MhsNilaiStateCopyWith(
-          MhsNilaiState value, $Res Function(MhsNilaiState) then) =
-      _$MhsNilaiStateCopyWithImpl<$Res, MhsNilaiState>;
+    MhsNilaiState value,
+    $Res Function(MhsNilaiState) then,
+  ) = _$MhsNilaiStateCopyWithImpl<$Res, MhsNilaiState>;
   @useResult
-  $Res call(
-      {MhsNilaiStatus status,
-      NilaiResponseModel? nilai,
-      TranskripResponseModel? transkrip,
-      String? errorMessage});
+  $Res call({
+    MhsNilaiStatus status,
+    NilaiResponseModel? nilai,
+    TranskripResponseModel? transkrip,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -501,6 +527,8 @@ class _$MhsNilaiStateCopyWithImpl<$Res, $Val extends MhsNilaiState>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of MhsNilaiState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -509,24 +537,31 @@ class _$MhsNilaiStateCopyWithImpl<$Res, $Val extends MhsNilaiState>
     Object? transkrip = freezed,
     Object? errorMessage = freezed,
   }) {
-    return _then(_value.copyWith(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as MhsNilaiStatus,
-      nilai: freezed == nilai
-          ? _value.nilai
-          : nilai // ignore: cast_nullable_to_non_nullable
-              as NilaiResponseModel?,
-      transkrip: freezed == transkrip
-          ? _value.transkrip
-          : transkrip // ignore: cast_nullable_to_non_nullable
-              as TranskripResponseModel?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ) as $Val);
+    return _then(
+      _value.copyWith(
+            status:
+                null == status
+                    ? _value.status
+                    : status // ignore: cast_nullable_to_non_nullable
+                        as MhsNilaiStatus,
+            nilai:
+                freezed == nilai
+                    ? _value.nilai
+                    : nilai // ignore: cast_nullable_to_non_nullable
+                        as NilaiResponseModel?,
+            transkrip:
+                freezed == transkrip
+                    ? _value.transkrip
+                    : transkrip // ignore: cast_nullable_to_non_nullable
+                        as TranskripResponseModel?,
+            errorMessage:
+                freezed == errorMessage
+                    ? _value.errorMessage
+                    : errorMessage // ignore: cast_nullable_to_non_nullable
+                        as String?,
+          )
+          as $Val,
+    );
   }
 }
 
@@ -534,15 +569,17 @@ class _$MhsNilaiStateCopyWithImpl<$Res, $Val extends MhsNilaiState>
 abstract class _$$MhsNilaiStateImplCopyWith<$Res>
     implements $MhsNilaiStateCopyWith<$Res> {
   factory _$$MhsNilaiStateImplCopyWith(
-          _$MhsNilaiStateImpl value, $Res Function(_$MhsNilaiStateImpl) then) =
-      __$$MhsNilaiStateImplCopyWithImpl<$Res>;
+    _$MhsNilaiStateImpl value,
+    $Res Function(_$MhsNilaiStateImpl) then,
+  ) = __$$MhsNilaiStateImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {MhsNilaiStatus status,
-      NilaiResponseModel? nilai,
-      TranskripResponseModel? transkrip,
-      String? errorMessage});
+  $Res call({
+    MhsNilaiStatus status,
+    NilaiResponseModel? nilai,
+    TranskripResponseModel? transkrip,
+    String? errorMessage,
+  });
 }
 
 /// @nodoc
@@ -550,9 +587,12 @@ class __$$MhsNilaiStateImplCopyWithImpl<$Res>
     extends _$MhsNilaiStateCopyWithImpl<$Res, _$MhsNilaiStateImpl>
     implements _$$MhsNilaiStateImplCopyWith<$Res> {
   __$$MhsNilaiStateImplCopyWithImpl(
-      _$MhsNilaiStateImpl _value, $Res Function(_$MhsNilaiStateImpl) _then)
-      : super(_value, _then);
+    _$MhsNilaiStateImpl _value,
+    $Res Function(_$MhsNilaiStateImpl) _then,
+  ) : super(_value, _then);
 
+  /// Create a copy of MhsNilaiState
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -561,35 +601,42 @@ class __$$MhsNilaiStateImplCopyWithImpl<$Res>
     Object? transkrip = freezed,
     Object? errorMessage = freezed,
   }) {
-    return _then(_$MhsNilaiStateImpl(
-      status: null == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
-              as MhsNilaiStatus,
-      nilai: freezed == nilai
-          ? _value.nilai
-          : nilai // ignore: cast_nullable_to_non_nullable
-              as NilaiResponseModel?,
-      transkrip: freezed == transkrip
-          ? _value.transkrip
-          : transkrip // ignore: cast_nullable_to_non_nullable
-              as TranskripResponseModel?,
-      errorMessage: freezed == errorMessage
-          ? _value.errorMessage
-          : errorMessage // ignore: cast_nullable_to_non_nullable
-              as String?,
-    ));
+    return _then(
+      _$MhsNilaiStateImpl(
+        status:
+            null == status
+                ? _value.status
+                : status // ignore: cast_nullable_to_non_nullable
+                    as MhsNilaiStatus,
+        nilai:
+            freezed == nilai
+                ? _value.nilai
+                : nilai // ignore: cast_nullable_to_non_nullable
+                    as NilaiResponseModel?,
+        transkrip:
+            freezed == transkrip
+                ? _value.transkrip
+                : transkrip // ignore: cast_nullable_to_non_nullable
+                    as TranskripResponseModel?,
+        errorMessage:
+            freezed == errorMessage
+                ? _value.errorMessage
+                : errorMessage // ignore: cast_nullable_to_non_nullable
+                    as String?,
+      ),
+    );
   }
 }
 
 /// @nodoc
 
 class _$MhsNilaiStateImpl implements _MhsNilaiState {
-  const _$MhsNilaiStateImpl(
-      {this.status = MhsNilaiStatus.initial,
-      this.nilai,
-      this.transkrip,
-      this.errorMessage});
+  const _$MhsNilaiStateImpl({
+    this.status = MhsNilaiStatus.initial,
+    this.nilai,
+    this.transkrip,
+    this.errorMessage,
+  });
 
   @override
   @JsonKey()
@@ -623,7 +670,9 @@ class _$MhsNilaiStateImpl implements _MhsNilaiState {
   int get hashCode =>
       Object.hash(runtimeType, status, nilai, transkrip, errorMessage);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of MhsNilaiState
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$MhsNilaiStateImplCopyWith<_$MhsNilaiStateImpl> get copyWith =>
@@ -631,11 +680,12 @@ class _$MhsNilaiStateImpl implements _MhsNilaiState {
 }
 
 abstract class _MhsNilaiState implements MhsNilaiState {
-  const factory _MhsNilaiState(
-      {final MhsNilaiStatus status,
-      final NilaiResponseModel? nilai,
-      final TranskripResponseModel? transkrip,
-      final String? errorMessage}) = _$MhsNilaiStateImpl;
+  const factory _MhsNilaiState({
+    final MhsNilaiStatus status,
+    final NilaiResponseModel? nilai,
+    final TranskripResponseModel? transkrip,
+    final String? errorMessage,
+  }) = _$MhsNilaiStateImpl;
 
   @override
   MhsNilaiStatus get status;
@@ -645,8 +695,11 @@ abstract class _MhsNilaiState implements MhsNilaiState {
   TranskripResponseModel? get transkrip;
   @override
   String? get errorMessage;
+
+  /// Create a copy of MhsNilaiState
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$MhsNilaiStateImplCopyWith<_$MhsNilaiStateImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

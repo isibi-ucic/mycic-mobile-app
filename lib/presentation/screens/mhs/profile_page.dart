@@ -139,8 +139,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
 
                         // Jurusan
-                        const Text(
-                          "Teknik Informatika - VIII",
+                        Text(
+                          user.userInfo,
                           style: TextStyle(
                             fontSize: 16,
                             color: AppColors.black,

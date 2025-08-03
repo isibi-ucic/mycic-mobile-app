@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'khs_bloc.dart';
+part of 'mhs_tugas_bloc.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -16,7 +16,7 @@ final _privateConstructorUsedError = UnsupportedError(
 );
 
 /// @nodoc
-mixin _$KhsEvent {
+mixin _$MhsTugasEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() started,
@@ -52,22 +52,24 @@ mixin _$KhsEvent {
 }
 
 /// @nodoc
-abstract class $KhsEventCopyWith<$Res> {
-  factory $KhsEventCopyWith(KhsEvent value, $Res Function(KhsEvent) then) =
-      _$KhsEventCopyWithImpl<$Res, KhsEvent>;
+abstract class $MhsTugasEventCopyWith<$Res> {
+  factory $MhsTugasEventCopyWith(
+    MhsTugasEvent value,
+    $Res Function(MhsTugasEvent) then,
+  ) = _$MhsTugasEventCopyWithImpl<$Res, MhsTugasEvent>;
 }
 
 /// @nodoc
-class _$KhsEventCopyWithImpl<$Res, $Val extends KhsEvent>
-    implements $KhsEventCopyWith<$Res> {
-  _$KhsEventCopyWithImpl(this._value, this._then);
+class _$MhsTugasEventCopyWithImpl<$Res, $Val extends MhsTugasEvent>
+    implements $MhsTugasEventCopyWith<$Res> {
+  _$MhsTugasEventCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of KhsEvent
+  /// Create a copy of MhsTugasEvent
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -81,14 +83,14 @@ abstract class _$$StartedImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$StartedImplCopyWithImpl<$Res>
-    extends _$KhsEventCopyWithImpl<$Res, _$StartedImpl>
+    extends _$MhsTugasEventCopyWithImpl<$Res, _$StartedImpl>
     implements _$$StartedImplCopyWith<$Res> {
   __$$StartedImplCopyWithImpl(
     _$StartedImpl _value,
     $Res Function(_$StartedImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsEvent
+  /// Create a copy of MhsTugasEvent
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -99,7 +101,7 @@ class _$StartedImpl implements _Started {
 
   @override
   String toString() {
-    return 'KhsEvent.started()';
+    return 'MhsTugasEvent.started()';
   }
 
   @override
@@ -174,7 +176,7 @@ class _$StartedImpl implements _Started {
   }
 }
 
-abstract class _Started implements KhsEvent {
+abstract class _Started implements MhsTugasEvent {
   const factory _Started() = _$StartedImpl;
 }
 
@@ -188,14 +190,14 @@ abstract class _$$FetchImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$FetchImplCopyWithImpl<$Res>
-    extends _$KhsEventCopyWithImpl<$Res, _$FetchImpl>
+    extends _$MhsTugasEventCopyWithImpl<$Res, _$FetchImpl>
     implements _$$FetchImplCopyWith<$Res> {
   __$$FetchImplCopyWithImpl(
     _$FetchImpl _value,
     $Res Function(_$FetchImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsEvent
+  /// Create a copy of MhsTugasEvent
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -206,7 +208,7 @@ class _$FetchImpl implements _Fetch {
 
   @override
   String toString() {
-    return 'KhsEvent.fetch()';
+    return 'MhsTugasEvent.fetch()';
   }
 
   @override
@@ -281,31 +283,31 @@ class _$FetchImpl implements _Fetch {
   }
 }
 
-abstract class _Fetch implements KhsEvent {
+abstract class _Fetch implements MhsTugasEvent {
   const factory _Fetch() = _$FetchImpl;
 }
 
 /// @nodoc
-mixin _$KhsState {
+mixin _$MhsTugasState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(KhsResponseModel data) success,
+    required TResult Function(MhsTugasResponseModel data) success,
     required TResult Function(String message) error,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(KhsResponseModel data)? success,
+    TResult? Function(MhsTugasResponseModel data)? success,
     TResult? Function(String message)? error,
   }) => throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(KhsResponseModel data)? success,
+    TResult Function(MhsTugasResponseModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) => throw _privateConstructorUsedError;
@@ -334,22 +336,24 @@ mixin _$KhsState {
 }
 
 /// @nodoc
-abstract class $KhsStateCopyWith<$Res> {
-  factory $KhsStateCopyWith(KhsState value, $Res Function(KhsState) then) =
-      _$KhsStateCopyWithImpl<$Res, KhsState>;
+abstract class $MhsTugasStateCopyWith<$Res> {
+  factory $MhsTugasStateCopyWith(
+    MhsTugasState value,
+    $Res Function(MhsTugasState) then,
+  ) = _$MhsTugasStateCopyWithImpl<$Res, MhsTugasState>;
 }
 
 /// @nodoc
-class _$KhsStateCopyWithImpl<$Res, $Val extends KhsState>
-    implements $KhsStateCopyWith<$Res> {
-  _$KhsStateCopyWithImpl(this._value, this._then);
+class _$MhsTugasStateCopyWithImpl<$Res, $Val extends MhsTugasState>
+    implements $MhsTugasStateCopyWith<$Res> {
+  _$MhsTugasStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -363,14 +367,14 @@ abstract class _$$InitialImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$InitialImplCopyWithImpl<$Res>
-    extends _$KhsStateCopyWithImpl<$Res, _$InitialImpl>
+    extends _$MhsTugasStateCopyWithImpl<$Res, _$InitialImpl>
     implements _$$InitialImplCopyWith<$Res> {
   __$$InitialImplCopyWithImpl(
     _$InitialImpl _value,
     $Res Function(_$InitialImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -381,7 +385,7 @@ class _$InitialImpl implements _Initial {
 
   @override
   String toString() {
-    return 'KhsState.initial()';
+    return 'MhsTugasState.initial()';
   }
 
   @override
@@ -398,7 +402,7 @@ class _$InitialImpl implements _Initial {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(KhsResponseModel data) success,
+    required TResult Function(MhsTugasResponseModel data) success,
     required TResult Function(String message) error,
   }) {
     return initial();
@@ -409,7 +413,7 @@ class _$InitialImpl implements _Initial {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(KhsResponseModel data)? success,
+    TResult? Function(MhsTugasResponseModel data)? success,
     TResult? Function(String message)? error,
   }) {
     return initial?.call();
@@ -420,7 +424,7 @@ class _$InitialImpl implements _Initial {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(KhsResponseModel data)? success,
+    TResult Function(MhsTugasResponseModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -468,7 +472,7 @@ class _$InitialImpl implements _Initial {
   }
 }
 
-abstract class _Initial implements KhsState {
+abstract class _Initial implements MhsTugasState {
   const factory _Initial() = _$InitialImpl;
 }
 
@@ -482,14 +486,14 @@ abstract class _$$LoadingImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$LoadingImplCopyWithImpl<$Res>
-    extends _$KhsStateCopyWithImpl<$Res, _$LoadingImpl>
+    extends _$MhsTugasStateCopyWithImpl<$Res, _$LoadingImpl>
     implements _$$LoadingImplCopyWith<$Res> {
   __$$LoadingImplCopyWithImpl(
     _$LoadingImpl _value,
     $Res Function(_$LoadingImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
 }
 
@@ -500,7 +504,7 @@ class _$LoadingImpl implements _Loading {
 
   @override
   String toString() {
-    return 'KhsState.loading()';
+    return 'MhsTugasState.loading()';
   }
 
   @override
@@ -517,7 +521,7 @@ class _$LoadingImpl implements _Loading {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(KhsResponseModel data) success,
+    required TResult Function(MhsTugasResponseModel data) success,
     required TResult Function(String message) error,
   }) {
     return loading();
@@ -528,7 +532,7 @@ class _$LoadingImpl implements _Loading {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(KhsResponseModel data)? success,
+    TResult? Function(MhsTugasResponseModel data)? success,
     TResult? Function(String message)? error,
   }) {
     return loading?.call();
@@ -539,7 +543,7 @@ class _$LoadingImpl implements _Loading {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(KhsResponseModel data)? success,
+    TResult Function(MhsTugasResponseModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -587,7 +591,7 @@ class _$LoadingImpl implements _Loading {
   }
 }
 
-abstract class _Loading implements KhsState {
+abstract class _Loading implements MhsTugasState {
   const factory _Loading() = _$LoadingImpl;
 }
 
@@ -598,19 +602,19 @@ abstract class _$$SuccessImplCopyWith<$Res> {
     $Res Function(_$SuccessImpl) then,
   ) = __$$SuccessImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({KhsResponseModel data});
+  $Res call({MhsTugasResponseModel data});
 }
 
 /// @nodoc
 class __$$SuccessImplCopyWithImpl<$Res>
-    extends _$KhsStateCopyWithImpl<$Res, _$SuccessImpl>
+    extends _$MhsTugasStateCopyWithImpl<$Res, _$SuccessImpl>
     implements _$$SuccessImplCopyWith<$Res> {
   __$$SuccessImplCopyWithImpl(
     _$SuccessImpl _value,
     $Res Function(_$SuccessImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -620,7 +624,7 @@ class __$$SuccessImplCopyWithImpl<$Res>
         null == data
             ? _value.data
             : data // ignore: cast_nullable_to_non_nullable
-                as KhsResponseModel,
+                as MhsTugasResponseModel,
       ),
     );
   }
@@ -632,11 +636,11 @@ class _$SuccessImpl implements _Success {
   const _$SuccessImpl(this.data);
 
   @override
-  final KhsResponseModel data;
+  final MhsTugasResponseModel data;
 
   @override
   String toString() {
-    return 'KhsState.success(data: $data)';
+    return 'MhsTugasState.success(data: $data)';
   }
 
   @override
@@ -650,7 +654,7 @@ class _$SuccessImpl implements _Success {
   @override
   int get hashCode => Object.hash(runtimeType, data);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -663,7 +667,7 @@ class _$SuccessImpl implements _Success {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(KhsResponseModel data) success,
+    required TResult Function(MhsTugasResponseModel data) success,
     required TResult Function(String message) error,
   }) {
     return success(data);
@@ -674,7 +678,7 @@ class _$SuccessImpl implements _Success {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(KhsResponseModel data)? success,
+    TResult? Function(MhsTugasResponseModel data)? success,
     TResult? Function(String message)? error,
   }) {
     return success?.call(data);
@@ -685,7 +689,7 @@ class _$SuccessImpl implements _Success {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(KhsResponseModel data)? success,
+    TResult Function(MhsTugasResponseModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -733,12 +737,12 @@ class _$SuccessImpl implements _Success {
   }
 }
 
-abstract class _Success implements KhsState {
-  const factory _Success(final KhsResponseModel data) = _$SuccessImpl;
+abstract class _Success implements MhsTugasState {
+  const factory _Success(final MhsTugasResponseModel data) = _$SuccessImpl;
 
-  KhsResponseModel get data;
+  MhsTugasResponseModel get data;
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$SuccessImplCopyWith<_$SuccessImpl> get copyWith =>
@@ -757,14 +761,14 @@ abstract class _$$ErrorImplCopyWith<$Res> {
 
 /// @nodoc
 class __$$ErrorImplCopyWithImpl<$Res>
-    extends _$KhsStateCopyWithImpl<$Res, _$ErrorImpl>
+    extends _$MhsTugasStateCopyWithImpl<$Res, _$ErrorImpl>
     implements _$$ErrorImplCopyWith<$Res> {
   __$$ErrorImplCopyWithImpl(
     _$ErrorImpl _value,
     $Res Function(_$ErrorImpl) _then,
   ) : super(_value, _then);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
@@ -790,7 +794,7 @@ class _$ErrorImpl implements _Error {
 
   @override
   String toString() {
-    return 'KhsState.error(message: $message)';
+    return 'MhsTugasState.error(message: $message)';
   }
 
   @override
@@ -804,7 +808,7 @@ class _$ErrorImpl implements _Error {
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
@@ -817,7 +821,7 @@ class _$ErrorImpl implements _Error {
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
     required TResult Function() loading,
-    required TResult Function(KhsResponseModel data) success,
+    required TResult Function(MhsTugasResponseModel data) success,
     required TResult Function(String message) error,
   }) {
     return error(message);
@@ -828,7 +832,7 @@ class _$ErrorImpl implements _Error {
   TResult? whenOrNull<TResult extends Object?>({
     TResult? Function()? initial,
     TResult? Function()? loading,
-    TResult? Function(KhsResponseModel data)? success,
+    TResult? Function(MhsTugasResponseModel data)? success,
     TResult? Function(String message)? error,
   }) {
     return error?.call(message);
@@ -839,7 +843,7 @@ class _$ErrorImpl implements _Error {
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
     TResult Function()? loading,
-    TResult Function(KhsResponseModel data)? success,
+    TResult Function(MhsTugasResponseModel data)? success,
     TResult Function(String message)? error,
     required TResult orElse(),
   }) {
@@ -887,12 +891,12 @@ class _$ErrorImpl implements _Error {
   }
 }
 
-abstract class _Error implements KhsState {
+abstract class _Error implements MhsTugasState {
   const factory _Error(final String message) = _$ErrorImpl;
 
   String get message;
 
-  /// Create a copy of KhsState
+  /// Create a copy of MhsTugasState
   /// with the given fields replaced by the non-null parameter values.
   @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ErrorImplCopyWith<_$ErrorImpl> get copyWith =>

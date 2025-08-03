@@ -27,7 +27,7 @@ class _ClassPageState extends State<ClassPage> {
 
   // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
   Future<void> _loadData() async {
-    context.read<MhsKelasBloc>().add(const MhsKelasEvent.getKelas());
+    context.read<MhsKelasBloc>().add(const MhsKelasEvent.fetch());
   }
 
   @override
@@ -47,115 +47,109 @@ class _ClassPageState extends State<ClassPage> {
         onRefresh: _loadData,
         child: BlocBuilder<MhsKelasBloc, MhsKelasState>(
           builder: (context, state) {
-            // Tampilkan loading indicator jika statusnya loading
-            if (state.status == MhsKelasStatus.loading && state.kelas == null) {
-              // Loading awal saat belum ada data sama sekali
-              return const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SpinKitThreeBounce(color: Colors.blueAccent, size: 20.0),
-                    Text("Loading..."),
-                  ],
-                ),
-              );
-            }
-
-            // Tampilkan error jika ada
-            if (state.status == MhsKelasStatus.error) {
-              return Center(
-                child: Text(state.errorMessage ?? 'Terjadi kesalahan'),
-              );
-            }
-
-            // Jika sudah ada data kelas, tampilkan
-            if (state.kelas != null) {
-              // Menggunakan res sebagai objek KelasResponseModel
-              final res = state.kelas!;
-
-              // `res` di sini adalah objek KelasResponseModel
-              debugPrint("Data view: ${res.data?.length} hari ditemukan");
-
-              final List<Datum>? dataHari = res.data; // List hari-hari
-
-              // Cek jika data hari kosong atau null
-              if (dataHari == null || dataHari.isEmpty) {
-                return const Center(
-                  child: Text('Tidak ada jadwal kelas untuk ditampilkan.'),
-                );
-              }
-
-              return ListView.builder(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.all(16),
-                itemCount:
-                    dataHari.length, // ✅ Menggunakan panjang dari List<Datum>
-                itemBuilder: (context, index) {
-                  final Datum hariItem = dataHari[index];
-
-                  final List<Kela> kelasPerHari =
-                      hariItem.kelas ?? []; // Daftar kelas untuk hari ini
-
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        hariItem.hari ??
-                            "Hari Tidak Diketahui", // ✅ Akses properti 'hari'
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
+            return state.maybeWhen(
+              orElse:
+                  () => const Center(
+                    child: Text("Silakan mulai dengan mengambil data kelas."),
+                  ),
+              loading:
+                  () => const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SpinKitThreeBounce(
+                          color: Colors.blueAccent,
+                          size: 20.0,
                         ),
-                      ),
-                      const SizedBox(height: 8),
+                        Text("Loading..."),
+                      ],
+                    ),
+                  ),
+              error:
+                  (message) => Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [Text("Gagal memuat data: $message")],
+                    ),
+                  ),
+              success: (response) {
+                final List<Datum>? dataHari = response.data;
 
-                      // Cek jika tidak ada kelas untuk hari ini
-                      if (kelasPerHari.isEmpty)
-                        const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text('Tidak ada kelas untuk hari ini.'),
-                        )
-                      else
-                        // Loop melalui daftar kelas di setiap hari
-                        ...List.generate(kelasPerHari.length, (kelasIndex) {
-                          final Kela kelasData =
-                              kelasPerHari[kelasIndex]; // Objek Kela (data per kelas)
-
-                          return GestureDetector(
-                            onTap: () {
-                              // Pastikan ClassDetailPage menerima parameter yang non-null
-                              msRoute(
-                                context,
-                                ClassDetailPage(
-                                  mkId: kelasData.mkId!,
-                                  namaMatkul:
-                                      kelasData.kelas ??
-                                      'N/A', // Memberikan nilai default jika null
-                                  dosen: kelasData.dosen ?? 'N/A',
-                                  waktu: kelasData.waktu ?? 'N/A',
-                                  ruangan: kelasData.ruangan ?? 'N/A',
-                                ),
-                              );
-                            },
-                            child: ClassCard(
-                              waktu: kelasData.waktu ?? 'N/A',
-                              kelas:
-                                  kelasData.kelas ??
-                                  'N/A', // Ini adalah nama mata kuliah
-                              dosen: kelasData.dosen ?? 'N/A',
-                              ruangan: kelasData.ruangan ?? 'N/A',
-                            ),
-                          );
-                        }),
-                      const SizedBox(height: 16), // Spasi antar hari
-                    ],
+                // Cek jika data hari kosong atau null
+                if (dataHari == null || dataHari.isEmpty) {
+                  return const Center(
+                    child: Text('Tidak ada jadwal kelas untuk ditampilkan.'),
                   );
-                },
-              );
-            } // Default
-            // State awal, sebelum ada data
-            return const Center(
-              child: Text("Silakan mulai dengan mengambil data kelas."),
+                }
+
+                return ListView.builder(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.all(16),
+                  itemCount:
+                      dataHari.length, // ✅ Menggunakan panjang dari List<Datum>
+                  itemBuilder: (context, index) {
+                    final Datum hariItem = dataHari[index];
+
+                    final List<Kela> kelasPerHari =
+                        hariItem.kelas ?? []; // Daftar kelas untuk hari ini
+
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          hariItem.hari ??
+                              "Hari Tidak Diketahui", // ✅ Akses properti 'hari'
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+
+                        // Cek jika tidak ada kelas untuk hari ini
+                        if (kelasPerHari.isEmpty)
+                          const Padding(
+                            padding: EdgeInsets.only(left: 8.0),
+                            child: Text('Tidak ada kelas untuk hari ini.'),
+                          )
+                        else
+                          // Loop melalui daftar kelas di setiap hari
+                          ...List.generate(kelasPerHari.length, (kelasIndex) {
+                            final Kela kelasData =
+                                kelasPerHari[kelasIndex]; // Objek Kela (data per kelas)
+
+                            return GestureDetector(
+                              onTap: () {
+                                // Pastikan ClassDetailPage menerima parameter yang non-null
+                                msRoute(
+                                  context,
+                                  ClassDetailPage(
+                                    mkId: kelasData.mkId!,
+                                    namaMatkul:
+                                        kelasData.kelas ??
+                                        'N/A', // Memberikan nilai default jika null
+                                    dosen: kelasData.dosen ?? 'N/A',
+                                    waktu: kelasData.waktu ?? 'N/A',
+                                    ruangan: kelasData.ruangan ?? 'N/A',
+                                  ),
+                                );
+                              },
+                              child: ClassCard(
+                                waktu: kelasData.waktu ?? 'N/A',
+                                kelas:
+                                    kelasData.kelas ??
+                                    'N/A', // Ini adalah nama mata kuliah
+                                dosen: kelasData.dosen ?? 'N/A',
+                                ruangan: kelasData.ruangan ?? 'N/A',
+                              ),
+                            );
+                          }),
+                        const SizedBox(height: 16), // Spasi antar hari
+                      ],
+                    );
+                  },
+                );
+              },
             );
           },
         ),

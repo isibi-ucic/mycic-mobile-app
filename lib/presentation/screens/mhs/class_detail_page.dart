@@ -4,7 +4,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
 import 'package:mycic_app/data/models/pertemuan_kelas_response_model.dart';
-import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas_detail/mhs_kelas_detail_bloc.dart';
 import 'package:mycic_app/presentation/screens/mhs/detail_pertemuan_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 
@@ -38,15 +38,15 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
 
   // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
   Future<void> _loadData() async {
-    context.read<MhsKelasBloc>().add(
-      MhsKelasEvent.getKelasPertemuan(widget.mkId),
+    context.read<MhsKelasDetailBloc>().add(
+      MhsKelasDetailEvent.fetch(widget.mkId),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: "Kelas Perkuliahan"),
+      appBar: const DefaultAppBar(title: "Kelas Perkuliahan"),
       backgroundColor: AppColors.bgDefault,
       body: RefreshIndicator(
         onRefresh: _loadData,
@@ -93,7 +93,7 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                       Row(
                         children: [
                           // Ikon dan Waktu
-                          Icon(
+                          const Icon(
                             Icons.access_time_outlined,
                             color: Colors.blueAccent,
                             size: 16,
@@ -119,7 +119,7 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                           ),
 
                           // Ikon dan Ruangan
-                          Icon(
+                          const Icon(
                             Icons.location_on_outlined,
                             color: Colors.blueAccent,
                             size: 16,
@@ -137,125 +137,126 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: 8),
-                BlocBuilder<MhsKelasBloc, MhsKelasState>(
+                const SizedBox(height: 8),
+                BlocBuilder<MhsKelasDetailBloc, MhsKelasDetailState>(
                   builder: (context, state) {
-                    // Tampilkan loading indicator jika statusnya loading
-                    if (state.status == MhsKelasStatus.loading &&
-                        state.pertemuan == null) {
-                      // Loading awal saat belum ada data sama sekali
-                      return const Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            SpinKitThreeBounce(
-                              color: Colors.blueAccent,
-                              size: 20.0,
-                            ),
-                            Text("Loading..."),
-                          ],
-                        ),
-                      );
-                    }
-
-                    // Tampilkan error jika ada
-                    if (state.status == MhsKelasStatus.error) {
-                      return Center(
-                        child: Text(state.errorMessage ?? 'Terjadi kesalahan'),
-                      );
-                    }
-
-                    // Jika sudah ada data kelas, tampilkan
-                    if (state.pertemuan != null) {
-                      final List<Datum>? dataPertemuan =
-                          state.pertemuan!.data; // List pertemuan
-
-                      // Cek jika data hari kosong atau null
-                      if (dataPertemuan == null || dataPertemuan.isEmpty) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return Container();
+                      },
+                      // Tampilkan loading indicator jika statusnya loading
+                      loading: () {
                         return const Center(
-                          child: Text('Tidak ada pertemuan untuk ditampilkan.'),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SpinKitThreeBounce(
+                                color: Colors.blueAccent,
+                                size: 20.0,
+                              ),
+                              Text("Loading..."),
+                            ],
+                          ),
                         );
-                      }
+                      },
+                      // Tampilkan error jika ada
+                      error:
+                          (message) => Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text("Gagal memuat data: $message")],
+                            ),
+                          ),
+                      success: (response) {
+                        final List<Datum>? dataPertemuan = response.data;
 
-                      return ListView.builder(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: dataPertemuan.length,
-                        itemBuilder: (context, index) {
-                          var urutan = index + 1;
-                          final pertemuan = dataPertemuan[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8.0),
-                            child: GestureDetector(
-                              onTap: () {
-                                msRoute(context, DetailPertemuanPage());
-                              },
-                              child: Card(
-                                elevation: 1,
-                                color: AppColors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                                clipBehavior: Clip.antiAlias,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 20,
+                        // Cek jika data hari kosong atau null
+                        if (dataPertemuan == null || dataPertemuan.isEmpty) {
+                          return const Center(
+                            child: Text(
+                              'Tidak ada pertemuan untuk ditampilkan.',
+                            ),
+                          );
+                        }
+
+                        return ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemCount: dataPertemuan.length,
+                          itemBuilder: (context, index) {
+                            var urutan = index + 1;
+                            final pertemuan = dataPertemuan[index];
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: GestureDetector(
+                                onTap: () {
+                                  msRoute(context, const DetailPertemuanPage());
+                                },
+                                child: Card(
+                                  elevation: 1,
+                                  color: AppColors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "Pertemuan Ke-$urutan",
-                                            style: const TextStyle(
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w700,
+                                  clipBehavior: Clip.antiAlias,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 20,
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              pertemuan.materi!,
+                                              style: const TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.w700,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 4),
-                                          Text(
-                                            'Tap untuk detail',
-                                            style: const TextStyle(
-                                              fontSize: 12,
-                                              color: Colors.black54,
+                                            const SizedBox(height: 4),
+                                            Text(
+                                              "Pertemuan $urutan",
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                color: Colors.black54,
+                                              ),
                                             ),
+                                          ],
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                            vertical: 8,
                                           ),
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          vertical: 8,
+                                          child: Divider(
+                                            height: 1,
+                                            color: AppColors.grey,
+                                          ),
                                         ),
-                                        child: Divider(
-                                          height: 1,
-                                          color: AppColors.grey,
+                                        Text(
+                                          pertemuan.deskripsi ?? '',
+                                          maxLines:
+                                              2, // Tentukan jumlah baris maksimal yang diizinkan
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(fontSize: 12),
                                         ),
-                                      ),
-                                      Text(
-                                        pertemuan.materi ?? '',
-                                        style: const TextStyle(fontSize: 12),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          );
-                        },
-                      );
-                    }
-
-                    // State awal, sebelum ada data
-                    return const Center(
-                      child: Text("Silakan mulai dengan mengambil data kelas."),
+                            );
+                          },
+                        );
+                      },
                     );
                   },
                 ),
