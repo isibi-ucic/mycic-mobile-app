@@ -9,7 +9,7 @@ import 'package:mycic_app/data/models/mhs_tugas_response_model.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/presentation/screens/mhs/absensi_page.dart';
-import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/informasi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/khs_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/skripsi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/transkrip_page.dart';
@@ -17,8 +17,10 @@ import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/tugas_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/ujian_page.dart';
 import 'package:mycic_app/presentation/widgets/all_menu.dart';
+import 'package:mycic_app/presentation/widgets/banner_skeleton.dart';
 import 'package:mycic_app/presentation/widgets/header_widget.dart';
 import 'package:mycic_app/presentation/widgets/my_kelas_banner.dart';
+import 'package:mycic_app/presentation/widgets/tugas_list_skeleton.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -113,10 +115,6 @@ class _HomePageState extends State<HomePage> {
 
                     // • Ambil nama jika ada
                     final nama = snapshot.data?.user.nama ?? '';
-
-                    // • Ambil email jika ada
-                    final nim = snapshot.data?.user.userNumber ?? '';
-
                     // user info
                     final userInfo = snapshot.data?.user.userInfo ?? '';
 
@@ -363,114 +361,6 @@ class _HomePageState extends State<HomePage> {
               ),
             ],
           ),
-        ),
-      ),
-    );
-  }
-}
-
-// Widget placeholder dengan layout yang sama seperti konten final
-class HeaderSkeleton extends StatelessWidget {
-  const HeaderSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    // Gunakan struktur Column yang sama persis
-    return SizedBox(height: 160);
-  }
-}
-
-// -- TAMBAHKAN --
-// Widget placeholder untuk banner saat loading
-class BannerSkeleton extends StatelessWidget {
-  const BannerSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CarouselSlider(
-      items: [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 8),
-          decoration: BoxDecoration(
-            color: Colors.black12,
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ],
-      options: CarouselOptions(
-        height: 155,
-        enlargeCenterPage: true,
-        viewportFraction: 0.92,
-      ),
-    );
-  }
-}
-
-// WIDGET SKELETON UNTUK DAFTAR TUGAS
-class TugasListSkeleton extends StatelessWidget {
-  const TugasListSkeleton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: 3, // Tampilkan 3 item placeholder
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      padding: const EdgeInsets.only(top: 12),
-      itemBuilder:
-          (context, index) => Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Card(
-              elevation: 1,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      height: 16,
-                      width: double.infinity,
-                      color: Colors.black12,
-                    ),
-                    const SizedBox(height: 8),
-                    Container(height: 12, width: 150, color: Colors.black12),
-                  ],
-                ),
-              ),
-            ),
-          ),
-    );
-  }
-}
-
-// WIDGET UNTUK MENAMPILKAN JIKA TIDAK ADA TUGAS
-class EmptyTugasWidget extends StatelessWidget {
-  const EmptyTugasWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.symmetric(vertical: 32.0, horizontal: 16.0),
-      child: Center(
-        child: Column(
-          children: [
-            // Ganti dengan gambar/ilustrasi Anda jika ada
-            Icon(Icons.check_circle_outline, size: 80, color: Colors.green),
-            SizedBox(height: 16),
-            Text(
-              'Tidak Ada Tugas!',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            SizedBox(height: 4),
-            Text(
-              'Semua tugas sudah selesai. Kerja bagus!',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black54),
-            ),
-          ],
         ),
       ),
     );

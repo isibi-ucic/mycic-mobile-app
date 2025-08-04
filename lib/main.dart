@@ -3,14 +3,21 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/features/bloc/auth/auth_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_kelas/dsn_kelas_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan/dsn_kelas_pertemuan_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan_detail/dsn_kelas_pertemuan_detail_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_kelas_today/dsn_kelas_today_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_tugas/dsn_tugas_bloc.dart';
 import 'package:mycic_app/features/bloc/info/info_bloc.dart';
 import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas_detail/mhs_kelas_detail_bloc.dart';
+import 'package:mycic_app/features/bloc/mhs_kelas_pertemuan_detail/mhs_kelas_pertemuan_detail_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
+import 'package:mycic_app/features/bloc/submit_presensi/submit_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
 import 'package:mycic_app/presentation/screens/splash_page.dart';
 
@@ -44,7 +51,14 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => KhsBloc()),
         BlocProvider(create: (context) => MhsKelasTodayBloc()),
         BlocProvider(create: (context) => MhsKelasDetailBloc()),
+        BlocProvider(create: (context) => MhsKelasPertemuanDetailBloc()),
         BlocProvider(create: (context) => MhsTugasBloc()),
+        BlocProvider(create: (context) => SubmitPresensiBloc()),
+        BlocProvider(create: (context) => DsnKelasTodayBloc()),
+        BlocProvider(create: (context) => DsnKelasBloc()),
+        BlocProvider(create: (context) => DsnKelasPertemuanBloc()),
+        BlocProvider(create: (context) => DsnKelasPertemuanDetailBloc()),
+        BlocProvider(create: (context) => DsnTugasBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

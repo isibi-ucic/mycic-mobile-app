@@ -1,158 +1,387 @@
+import 'dart:io';
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mycic_app/core/assets/assets.gen.dart';
 import 'package:mycic_app/core/components/buttons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
+import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan_detail/dsn_kelas_pertemuan_detail_bloc.dart';
 import 'package:mycic_app/presentation/screens/dosen/template_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 
-class DetailPertemuanPage extends StatelessWidget {
-  const DetailPertemuanPage({super.key});
+class DetailPertemuanPage extends StatefulWidget {
+  final int pertemuanId;
+
+  String namaMatkul;
+  String ruangan;
+  String waktu;
+
+  DetailPertemuanPage({
+    super.key,
+    required this.pertemuanId,
+    required this.namaMatkul,
+    required this.ruangan,
+    required this.waktu,
+  });
+
+  @override
+  State<DetailPertemuanPage> createState() => _DetailPertemuanPageState();
+}
+
+class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
+  // 1. Buat ScreenshotController dan GlobalKey
+  final ScreenshotController _screenshotController = ScreenshotController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Memuat data saat halaman pertama kali dibuka
+    _loadData();
+  }
+
+  // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
+  Future<void> _loadData() async {
+    context.read<DsnKelasPertemuanDetailBloc>().add(
+      DsnKelasPertemuanDetailEvent.fetch(widget.pertemuanId),
+    );
+  }
+
+  // 2. Perbaiki fungsi untuk Share QR Code
+  // 1. BUAT FUNGSI INTERNAL BARU
+  // Fungsi ini bertugas menangkap gambar QR dan mengembalikannya sebagai File
+  Future<File?> _captureAndGetQrFile() async {
+    // Ambil data QR dari state BLoC
+    final state = context.read<DsnKelasPertemuanDetailBloc>().state;
+    final qrCodeData = state.maybeWhen(
+      success: (response) => response,
+      orElse: () => null,
+    );
+
+    if (qrCodeData == null) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Gagal mendapatkan data QR Code.')),
+        );
+      }
+      return null;
+    }
+
+    try {
+      // 1. Buat widget QR yang akan di-capture (dengan background putih)
+      final qrWidgetToCapture = Container(
+        // buat agar fit lebarnya
+        width: double.infinity,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              QrImageView(
+                data: qrCodeData.data.qrPresensi!,
+                version: QrVersions.auto,
+                size: MediaQuery.of(context).size.width / 2,
+                gapless: false,
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "KODE UNIK : ${qrCodeData.data.qrPresensi!.substring(0, 8)}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "QR CODE ABSENSI PERTEMUAN ${qrCodeData.data.pertemuanKe}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "MATA KULIAH ${widget.namaMatkul.toUpperCase()}",
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Tanggal Pertemuan Sabtu, ${qrCodeData.data.tanggal.toString().substring(0, 10)}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Jam Kelas Mulai ${widget.waktu.substring(0, 5)}",
+                style: TextStyle(fontSize: 14, color: Colors.grey[600]),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      // 2. Capture widget tersebut dan dapatkan hasilnya sebagai byte
+      final imageBytes = await _screenshotController.captureFromWidget(
+        qrWidgetToCapture,
+        delay: const Duration(milliseconds: 10),
+      );
+
+      // 3. Simpan byte ke file temporer
+      final directory = await getTemporaryDirectory();
+      final imagePath = '${directory.path}/qr_presensi.png';
+      final file = await File(imagePath).create();
+      await file.writeAsBytes(imageBytes);
+      return file;
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Gagal membuat file QR: $e')));
+      }
+      return null;
+    }
+  }
+
+  // 2. MODIFIKASI FUNGSI SHARE
+  // Sekarang fungsi ini hanya memanggil fungsi internal dan membagikan hasilnya
+  Future<void> _shareQrCode() async {
+    final imageFile = await _captureAndGetQrFile();
+    if (imageFile == null) return;
+
+    await Share.shareXFiles([
+      XFile(imageFile.path),
+    ], text: 'Silakan pindai QR Code ini untuk presensi.');
+  }
+
+  // 3. MODIFIKASI FUNGSI DOWNLOAD
+  // Fungsi ini juga memanggil fungsi internal dan menyimpan hasilnya ke galeri
+  Future<void> _downloadQrCode() async {
+    final imageFile = await _captureAndGetQrFile();
+    if (imageFile == null) return;
+
+    await FlutterImageGallerySaver.saveFile(imageFile.path);
+
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('QR Code berhasil disimpan di galeri.'),
+          backgroundColor: Colors.green,
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: DefaultAppBar(title: 'Detail Pertemuan'),
+      appBar: const DefaultAppBar(title: 'Detail Pertemuan'),
       backgroundColor: AppColors.bgDefault,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "Materi Perkuliahan disini",
-                  textAlign: TextAlign.left,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                Wrap(
-                  spacing: 8,
-                  children: [
-                    Text(
-                      "Ruangan 201",
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                    const Text('|', style: TextStyle(color: Colors.black26)),
-                    Text(
-                      "Rabu, 9:00 - 11:00",
-                      style: const TextStyle(color: Colors.black54),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 16),
-                // ClipRRect(
-                //   borderRadius: BorderRadius.circular(12),
-                //   child: Container(
-                //     color: Colors.grey[300], // background saat loading/error
-                //     height: 200, // Atur sesuai kebutuhan tampilan
-                //     width: double.infinity,
-                //     child: const PDF().cachedFromUrl(
-                //       "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
-                //       placeholder:
-                //           (progress) => Center(
-                //             child: CircularProgressIndicator(value: progress / 100),
-                //           ),
-                //       errorWidget:
-                //           (error) => Center(child: Text('Gagal memuat PDF')),
-                //     ),
-                //   ),
-                // ),
-                ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: Container(
-                    color: Colors.grey[300],
-                    child: const SizedBox(
-                      height: 200,
-                      child: Center(child: Text('PDF View')),
-                    ),
-                  ),
-                ),
-
-                SizedBox(height: 16),
-                Text(
-                  "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-                  textAlign: TextAlign.justify,
-                  style: const TextStyle(fontSize: 16),
-                ),
-
-                SizedBox(height: 16),
-                Align(
-                  alignment: Alignment.center,
-                  child: Assets.images.qrPresensi.image(
-                    height:
-                        MediaQueryData.fromView(View.of(context)).size.width /
-                        2,
-                  ),
-                ),
-                SizedBox(height: 16),
-
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: BlocBuilder<
+          DsnKelasPertemuanDetailBloc,
+          DsnKelasPertemuanDetailState
+        >(
+          builder: (context, state) {
+            // Gunakan maybeMap untuk mendapatkan data atau state lainnya dengan mudah
+            return state.maybeMap(
+              loading:
+                  (_) => const Center(
+                    child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        GestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Assets.icons.download.svg(
-                                  colorFilter: ColorFilter.mode(
-                                    AppColors.grey,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Text("Download"),
-                              ],
-                            ),
-                          ),
+                        SpinKitThreeBounce(
+                          color: Colors.blueAccent,
+                          size: 20.0,
                         ),
-                        SizedBox(width: 12),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Row(
-                              children: [
-                                Assets.icons.share.svg(
-                                  colorFilter: ColorFilter.mode(
-                                    AppColors.grey,
-                                    BlendMode.srcIn,
-                                  ),
-                                ),
-                                SizedBox(width: 8),
-                                Text("Share"),
-                              ],
-                            ),
-                          ),
-                        ),
+                        Text("Loading..."),
                       ],
                     ),
-                  ],
-                ),
-                SizedBox(height: 24),
-                Button.filled(
-                  label: "Buat QR Presensi",
-                  color: AppColors.primary,
-                  onPressed: () {
-                    msRoute(context, const TemplateDosenPage());
-                  },
-                  height: 45,
-                  fontSize: 16,
-                ),
-              ],
-            ),
-          ),
+                  ),
+              success:
+                  (successState) => SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        24,
+                        20,
+                        24,
+                        100,
+                      ), // Beri padding bawah
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pertemuan ${successState.data.data.pertemuanKe} - ${successState.data.data.materi}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          // ... (Widget Wrap dan PDF View Anda tetap sama di sini)
+                          Wrap(
+                            spacing: 8,
+                            children: [
+                              Text(
+                                widget.ruangan,
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                              Text(
+                                '|',
+                                style: TextStyle(color: Colors.black26),
+                              ),
+                              Text(
+                                widget.waktu,
+                                style: TextStyle(color: Colors.black54),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 16),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              color: Colors.grey[300],
+                              child: const SizedBox(
+                                height: 200,
+                                child: Center(child: Text('PDF View')),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          Text(
+                            successState.data.data.deskripsi,
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 16),
+
+                          // Bagian QR Code (jika ada)
+                          if (successState.data.data.qrPresensi != null) ...[
+                            const Divider(height: 32),
+                            Container(
+                              // buat agar fit lebarnya
+                              width: double.infinity,
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Center(
+                                  child: QrImageView(
+                                    data: successState.data.data.qrPresensi!,
+                                    version: QrVersions.auto,
+                                    size: MediaQuery.of(context).size.width / 2,
+                                    gapless: false,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                // --- Tombol Download ---
+                                Material(
+                                  color:
+                                      Colors
+                                          .transparent, // Buat Material transparan
+                                  child: InkWell(
+                                    onTap: _downloadQrCode,
+                                    borderRadius: BorderRadius.circular(
+                                      12,
+                                    ), // Bentuk ripple sesuai border
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Row(
+                                        children: [
+                                          Assets.icons.download.svg(
+                                            colorFilter: const ColorFilter.mode(
+                                              AppColors.grey,
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          const Text("Download"),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+
+                                // --- Tombol Share ---
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: _shareQrCode,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(12.0),
+                                      child: Row(
+                                        children: [
+                                          Assets.icons.share.svg(
+                                            colorFilter: const ColorFilter.mode(
+                                              AppColors.grey,
+                                              BlendMode.srcIn,
+                                            ),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          const Text("Share"),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
+                    ),
+                  ),
+              // Tampilkan CircularProgressIndicator untuk state lainnya
+              orElse: () => const Center(child: CircularProgressIndicator()),
+            );
+          },
         ),
+      ),
+      // 1. Gunakan bottomNavigationBar untuk tombol yang menempel di bawah
+      bottomNavigationBar: BlocBuilder<
+        DsnKelasPertemuanDetailBloc,
+        DsnKelasPertemuanDetailState
+      >(
+        builder: (context, state) {
+          // Hanya tampilkan tombol jika state adalah success dan qrPresensi null
+          return state.maybeWhen(
+            success: (response) {
+              if (response.data.qrPresensi == null) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(
+                    24,
+                    0,
+                    24,
+                    32,
+                  ), // Padding untuk jarak
+                  child: Button.filled(
+                    label: "Buat QR Presensi",
+                    color: AppColors.primary,
+                    onPressed: () {
+                      msRoute(context, const TemplateDosenPage());
+                    },
+                    height: 45,
+                    fontSize: 16,
+                  ),
+                );
+              }
+              // Jika QR sudah ada, kembalikan widget kosong
+              return const SizedBox.shrink();
+            },
+            // Kembalikan widget kosong untuk state lain
+            orElse: () => const SizedBox.shrink(),
+          );
+        },
       ),
     );
   }

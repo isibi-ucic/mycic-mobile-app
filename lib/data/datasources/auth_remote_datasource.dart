@@ -1,7 +1,6 @@
 import "package:dartz/dartz.dart";
 import "package:dio/dio.dart";
 import "package:mycic_app/core/constants/variables.dart";
-import "package:mycic_app/data/datasources/auth_local_datasource.dart";
 import "package:mycic_app/data/models/auth_response_model.dart";
 
 class AuthRemoteDataSource {
@@ -11,7 +10,7 @@ class AuthRemoteDataSource {
     String nim,
     String password,
   ) async {
-    final url = '${Variables.baseUrl}/auth';
+    const url = '${Variables.baseUrl}/auth';
 
     try {
       final response = await _dio.post(
@@ -28,13 +27,7 @@ class AuthRemoteDataSource {
     } catch (e) {
       if (e is DioException) {
         // Log or print exception details for debugging
-        print('DioException: ${e.message}');
-        print('DioException type: ${e.type}');
-        if (e.response != null) {
-          print('Response status code: ${e.response!.statusCode}');
-          print('Response data: ${e.response!.data}');
-        }
-        print('Underlying error: ${e.error}');
+        if (e.response != null) {}
 
         if (e.response != null) {
           final errorResponse = e.response!.data;
@@ -43,12 +36,12 @@ class AuthRemoteDataSource {
           }
         }
       }
-      return Left('Network error'); // or a more specific error message
+      return const Left('Network error'); // or a more specific error message
     }
   }
 
   Future<Either<String, String>> logout() async {
-    final url = '${Variables.baseUrl}/logout';
+    const url = '${Variables.baseUrl}/logout';
 
     try {
       final response = await _dio.post(
@@ -71,10 +64,8 @@ class AuthRemoteDataSource {
       }
     } on DioException catch (e) {
       final message = e.response?.data['message'] ?? 'Network error';
-      print('Logout error: $message');
       return Left('Gagal keluar: $message');
     } catch (e) {
-      print('Logout exception: $e');
       return const Left('Gagal keluar: Network error');
     }
   }

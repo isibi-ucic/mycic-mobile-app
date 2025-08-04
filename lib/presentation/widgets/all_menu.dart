@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mycic_app/core/core.dart';
 import 'package:mycic_app/presentation/screens/mhs/class_page.dart';
-import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/informasi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/jadwal_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/khs_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/menus_page.dart';

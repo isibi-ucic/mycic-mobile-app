@@ -4,14 +4,14 @@ import 'package:mycic_app/core/constants/colors.dart';
 class ClassCard extends StatelessWidget {
   final String waktu;
   final String kelas;
-  final String dosen;
+  final String? dosen;
   final String ruangan;
 
   const ClassCard({
     super.key,
     required this.waktu,
     required this.kelas,
-    required this.dosen,
+    this.dosen,
     required this.ruangan,
   });
 
@@ -35,23 +35,26 @@ class ClassCard extends StatelessWidget {
             // Definisikan style satu kali untuk semua teks
             style: TextStyle(fontSize: 14, color: Colors.grey[700]),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Bagian 1: Dosen (1/3 dari lebar)
-                Expanded(
-                  child: Text(
-                    dosen,
-                    textAlign: TextAlign.center, // Pusatkan teks
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                if (dosen != null) ...[
+                  Expanded(
+                    child: Text(
+                      dosen!,
+                      textAlign: TextAlign.center, // Pusatkan teks
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
                   ),
-                ),
-
-                // Pemisah 1
-                VerticalDivider(
-                  color: Colors.grey[300],
-                  thickness: 1,
-                  width: 16, // Lebar area pemisah
-                ),
+                  // Pemisah 1
+                  VerticalDivider(
+                    color: Colors.grey[300],
+                    thickness: 1,
+                    width: 16, // Lebar area pemisah
+                  ),
+                ],
 
                 // Bagian 2: Waktu (1/3 dari lebar)
                 Expanded(

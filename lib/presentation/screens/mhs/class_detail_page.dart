@@ -191,7 +191,12 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                               padding: const EdgeInsets.only(bottom: 8.0),
                               child: GestureDetector(
                                 onTap: () {
-                                  msRoute(context, const DetailPertemuanPage());
+                                  msRoute(
+                                    context,
+                                    DetailPertemuanPage(
+                                      pertemuanId: pertemuan.id!,
+                                    ),
+                                  );
                                 },
                                 child: Card(
                                   elevation: 1,

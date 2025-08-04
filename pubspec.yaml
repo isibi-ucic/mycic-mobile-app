@@ -67,6 +67,8 @@ dependencies:
   text_marquee: ^0.0.2
   toastification: ^3.0.2
   marquee: ^2.3.0
+  screenshot: ^3.0.0
+  flutter_image_gallery_saver: ^0.0.2
 
 dev_dependencies:
   flutter_test:

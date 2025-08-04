@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
-import 'package:mycic_app/presentation/screens/mhs/informasi_page.dart';
+import 'package:mycic_app/presentation/screens/informasi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/profile_page.dart';
 
 class HeaderWidget extends StatelessWidget {
