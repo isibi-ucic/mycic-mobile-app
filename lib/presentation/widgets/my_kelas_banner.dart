@@ -46,7 +46,7 @@ class MyKelasBanner extends StatelessWidget {
               children: [
                 Text(
                   adakelas ? 'Kelas Hari Ini' : 'Tidak ada kelas hari ini',
-                  style: TextStyle(fontSize: 16, color: AppColors.white),
+                  style: const TextStyle(fontSize: 16, color: AppColors.white),
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
@@ -93,17 +93,17 @@ class MyKelasBanner extends StatelessWidget {
                               ruangan: ruangan,
                             ),
                           )
-                          : msRoute(context, ClassPage());
+                          : msRoute(context, const ClassPage());
                     },
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           adakelas ? 'Lihat Detail' : 'Lihat Jadwal',
-                          style: TextStyle(fontSize: 10),
+                          style: const TextStyle(fontSize: 10),
                         ),
-                        SizedBox(width: 10),
-                        Icon(Icons.arrow_forward_ios, size: 10),
+                        const SizedBox(width: 10),
+                        const Icon(Icons.arrow_forward_ios, size: 10),
                       ],
                     ),
                   ),

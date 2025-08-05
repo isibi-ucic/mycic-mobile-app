@@ -49,9 +49,7 @@ class _UjianPageState extends State<UjianPage> {
                       orElse: () {
                         // Tampilan untuk state awal atau tak terduga
                         return const Center(
-                          child: Text(
-                            "Tarik ke bawah untuk memuat jadwal ujian.",
-                          ),
+                          child: Text("Tarik ke bawah untuk memuat jadwal."),
                         );
                       },
                       loading: () {

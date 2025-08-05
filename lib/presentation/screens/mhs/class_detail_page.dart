@@ -195,6 +195,8 @@ class _ClassDetailPageState extends State<ClassDetailPage> {
                                     context,
                                     DetailPertemuanPage(
                                       pertemuanId: pertemuan.id!,
+                                      ruangan: widget.ruangan!,
+                                      waktu: widget.waktu!,
                                     ),
                                   );
                                 },

@@ -1,91 +1,164 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mycic_app/features/bloc/skripsi/skripsi_bloc.dart';
 
-class SkripsiPage extends StatelessWidget {
+class SkripsiPage extends StatefulWidget {
   const SkripsiPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    // --- DATA DUMMY (Nantinya bisa diganti dari API) ---
-    const judulSkripsi =
-        "Rancang Bangun Sistem Informasi Manajemen Aset Berbasis Web menggunakan Framework Laravel";
-    const dosen1 = "Dr. Budi Hartono, S.T., M.Kom.";
-    const bimbinganDosen1 = 8;
-    const dosen2 = "Siti Aminah, S.Kom., M.T.";
-    const bimbinganDosen2 = 6;
-    // --- END OF DATA DUMMY ---
+  State<SkripsiPage> createState() => _SkripsiPageState();
+}
 
+class _SkripsiPageState extends State<SkripsiPage> {
+  @override
+  void initState() {
+    super.initState();
+    // Memuat data saat halaman pertama kali dibuka
+    _loadData();
+  }
+
+  // Fungsi untuk memuat ulang data, dipanggil oleh RefreshIndicator
+  Future<void> _loadData() async {
+    context.read<SkripsiBloc>().add(const SkripsiEvent.fetch());
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey[100], // Warna background soft
-      appBar: DefaultAppBar(title: 'Informasi Skripsi'),
+      appBar: const DefaultAppBar(title: 'Informasi Skripsi'),
 
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // --- KARTU JUDUL SKRIPSI ---
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withAlpha(6),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
+      body: RefreshIndicator(
+        onRefresh: _loadData,
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(16.0),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                child: BlocBuilder<SkripsiBloc, SkripsiState>(
+                  builder: (context, state) {
+                    return state.maybeWhen(
+                      orElse: () {
+                        return const Center(
+                          child: Text("Tarik ke bawah untuk memuat data."),
+                        );
+                      },
+                      // Tampilkan loading indicator jika statusnya loading
+                      loading: () {
+                        // Gunakan Container untuk membatasi tinggi widget
+                        return Container(
+                          // Hitung tinggi viewport: tinggi layar - tinggi AppBar - tinggi status bar
+                          height:
+                              MediaQuery.of(context).size.height -
+                              kToolbarHeight -
+                              MediaQuery.of(context).padding.top,
+                          child: const Center(
+                            child: Column(
+                              // Ganti ke MainAxisSize.min agar Column tidak mencoba mengisi seluruh Container
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SpinKitThreeBounce(
+                                  color: Colors.blueAccent,
+                                  size: 20.0,
+                                ),
+                                SizedBox(height: 8), // Beri sedikit jarak
+                                Text("Loading..."),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      // Tampilkan error jika ada
+                      error:
+                          (message) => Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [Text("Gagal memuat data: $message")],
+                            ),
+                          ),
+                      success: (response) {
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // --- KARTU JUDUL SKRIPSI ---
+                            Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black.withAlpha(6),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Judul Skripsi",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      color: Colors.grey[600],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    response.data.judul,
+                                    style: const TextStyle(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.4, // Spasi antar baris
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 24),
+
+                            // --- HEADER DOSEN PEMBIMBING ---
+                            const Text(
+                              "Dosen Pembimbing",
+                              style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 16),
+
+                            // --- KARTU DOSEN 1 ---
+                            _DosenCard(
+                              namaDosen: response.data.namaPembimbing1,
+                              statusPembimbing: "Pembimbing 1",
+                              jumlahBimbingan: response.data.totalBimbingan1,
+                            ),
+                            const SizedBox(height: 12),
+
+                            // --- KARTU DOSEN 2 ---
+                            _DosenCard(
+                              namaDosen: response.data.namaPembimbing2,
+                              statusPembimbing: "Pembimbing 2",
+                              jumlahBimbingan: response.data.totalBimbingan2,
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Judul Skripsi Anda",
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    judulSkripsi,
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      height: 1.4, // Spasi antar baris
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // --- HEADER DOSEN PEMBIMBING ---
-            const Text(
-              "Dosen Pembimbing",
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 16),
-
-            // --- KARTU DOSEN 1 ---
-            _DosenCard(
-              namaDosen: dosen1,
-              statusPembimbing: "Pembimbing 1",
-              jumlahBimbingan: bimbinganDosen1,
-            ),
-            const SizedBox(height: 12),
-
-            // --- KARTU DOSEN 2 ---
-            _DosenCard(
-              namaDosen: dosen2,
-              statusPembimbing: "Pembimbing 2",
-              jumlahBimbingan: bimbinganDosen2,
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

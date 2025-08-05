@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/constants/colors.dart';
@@ -17,6 +18,7 @@ import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dar
 import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
+import 'package:mycic_app/features/bloc/skripsi/skripsi_bloc.dart';
 import 'package:mycic_app/features/bloc/submit_presensi/submit_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
 import 'package:mycic_app/presentation/screens/splash_page.dart';
@@ -26,7 +28,10 @@ import 'package:mycic_app/presentation/screens/splash_page.dart';
 /// This function initializes the app by calling `runApp` with `MyCicApp` as
 /// the root widget, which sets up the widget tree and starts the Flutter framework.
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  // 2. Tambahkan baris ini untuk menginisialisasi data lokal Bahasa Indonesia
+  await initializeDateFormatting('id_ID', null);
   runApp(const MyCicApp());
 }
 
@@ -59,6 +64,7 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => DsnKelasPertemuanBloc()),
         BlocProvider(create: (context) => DsnKelasPertemuanDetailBloc()),
         BlocProvider(create: (context) => DsnTugasBloc()),
+        BlocProvider(create: (context) => SkripsiBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

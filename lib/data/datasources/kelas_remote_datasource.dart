@@ -238,7 +238,6 @@ class KelasRemoteDatasource {
     const url = '${Variables.baseUrl}/dsn/kelas/today';
     final authData = await AuthLocalDatasource().getAuthData();
 
-    debugPrint('authData: ${authData?.user.userNumber}');
     try {
       final response = await _dio.get(
         url,
@@ -246,7 +245,7 @@ class KelasRemoteDatasource {
         options: Options(headers: {'Accept': 'application/json'}),
       );
 
-      debugPrint('response today doesn: ${response.statusCode}');
+      debugPrint('response today doesn: ${response.data}');
       if (response.statusCode == 200) {
         return Right(KelasTodayResponseModel.fromMap(response.data));
       } else {

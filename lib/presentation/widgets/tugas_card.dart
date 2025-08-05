@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons/lucide_icons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
+import 'package:mycic_app/core/helper/date_formatter.dart';
 
 class TugasCard extends StatelessWidget {
   final String judul;
+  final String mataKuliah;
   final String tenggat;
   final String pengajar;
   final VoidCallback onSubmit;
@@ -11,6 +13,7 @@ class TugasCard extends StatelessWidget {
   const TugasCard({
     super.key,
     required this.judul,
+    required this.mataKuliah,
     required this.tenggat,
     required this.pengajar,
     required this.onSubmit,
@@ -29,75 +32,65 @@ class TugasCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // --- Judul Tugas ---
+            // 1. Judul Tugas
             Text(
               judul,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
             ),
-            const Divider(height: 32),
 
-            // --- Detail dengan Ikon ---
-            _buildInfoRow(
-              icon: LucideIcons.calendar,
-              text: tenggat,
-              label: 'Tenggat',
+            // 2. Mata Kuliah (langsung di bawah judul)
+            const SizedBox(height: 4),
+            Text(
+              "${mataKuliah} - ${pengajar}",
+              style: TextStyle(color: Colors.grey[600], fontSize: 13),
             ),
-            const SizedBox(height: 12),
-            _buildInfoRow(
-              icon: LucideIcons.user,
-              text: pengajar,
-              label: 'Pengajar',
-            ),
-            const SizedBox(height: 16),
+            const Divider(height: 24),
 
-            // --- Tombol Aksi ---
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FilledButton(
-                onPressed: onSubmit,
-                style: FilledButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 20,
-                    vertical: 10,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+            // 4. Area Aksi (Tenggat dan Tombol)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment:
+                  CrossAxisAlignment.center, // Sejajarkan secara vertikal
+              children: [
+                // 5. Tenggat Waktu (lebih menonjol)
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Tenggat:',
+                      style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      DateFormatter.formatHariTanggal(tenggat.toString()),
+                      style: const TextStyle(
+                        color: Colors.redAccent,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
-                child: const Text('Submit Tugas'),
-              ),
+
+                // 6. Tombol Submit
+                FilledButton(
+                  onPressed: onSubmit,
+                  style: FilledButton.styleFrom(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 10,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  child: const Text('Submit Tugas'),
+                ),
+              ],
             ),
           ],
         ),
       ),
-    );
-  }
-
-  // Widget bantuan untuk membuat baris info
-  Widget _buildInfoRow({
-    required IconData icon,
-    required String text,
-    required String label,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, color: Colors.blueAccent, size: 20),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: TextStyle(color: Colors.grey[600], fontSize: 12),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              text,
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-            ),
-          ],
-        ),
-      ],
     );
   }
 }

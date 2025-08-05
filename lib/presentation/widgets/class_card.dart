@@ -43,7 +43,7 @@ class ClassCard extends StatelessWidget {
                   Expanded(
                     child: Text(
                       dosen!,
-                      textAlign: TextAlign.center, // Pusatkan teks
+                      textAlign: TextAlign.left, // Pusatkan teks
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -54,34 +54,44 @@ class ClassCard extends StatelessWidget {
                     thickness: 1,
                     width: 16, // Lebar area pemisah
                   ),
+                  // Bagian 2: Waktu (1/3 dari lebar)
+                  Expanded(
+                    child: Text(
+                      waktu,
+                      textAlign: TextAlign.center, // Pusatkan teks
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
+
+                  // Pemisah 2
+                  VerticalDivider(
+                    color: Colors.grey[300],
+                    thickness: 1,
+                    width: 16,
+                  ),
+
+                  // Bagian 3: Ruangan (1/3 dari lebar)
+                  Expanded(
+                    child: Text(
+                      ruangan,
+                      textAlign: TextAlign.center, // Pusatkan teks
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
-
-                // Bagian 2: Waktu (1/3 dari lebar)
-                Expanded(
-                  child: Text(
-                    waktu,
-                    textAlign: TextAlign.center, // Pusatkan teks
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                if (dosen == null) ...[
+                  // Tampilkan Waktu
+                  Text(waktu), // Tidak perlu Expanded
+                  VerticalDivider(
+                    color: Colors.grey[300],
+                    thickness: 1,
+                    width: 16,
                   ),
-                ),
-
-                // Pemisah 2
-                VerticalDivider(
-                  color: Colors.grey[300],
-                  thickness: 1,
-                  width: 16,
-                ),
-
-                // Bagian 3: Ruangan (1/3 dari lebar)
-                Expanded(
-                  child: Text(
-                    ruangan,
-                    textAlign: TextAlign.center, // Pusatkan teks
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
+                  // Tampilkan Ruangan
+                  Text(ruangan), // Tidak perlu Expanded
+                ],
               ],
             ),
           ),

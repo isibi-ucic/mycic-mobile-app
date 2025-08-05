@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:lucide_icons/lucide_icons.dart';
 import 'package:mycic_app/core/components/buttons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas_pertemuan_detail/mhs_kelas_pertemuan_detail_bloc.dart';
+import 'package:mycic_app/presentation/screens/dosen/template_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/scanner_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
+import 'package:screenshot/screenshot.dart';
 
 class DetailPertemuanPage extends StatefulWidget {
   final int pertemuanId;
-  const DetailPertemuanPage({super.key, required this.pertemuanId});
+  String ruangan;
+  String waktu;
+
+  DetailPertemuanPage({
+    super.key,
+    required this.pertemuanId,
+    required this.ruangan,
+    required this.waktu,
+  });
 
   @override
   State<DetailPertemuanPage> createState() => _DetailPertemuanPageState();
 }
 
 class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
+  @override
   void initState() {
     super.initState();
     // Memuat data saat halaman pertama kali dibuka
@@ -36,117 +49,106 @@ class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
       backgroundColor: AppColors.bgDefault,
       body: RefreshIndicator(
         onRefresh: _loadData,
-        child: SingleChildScrollView(
-          physics: const AlwaysScrollableScrollPhysics(),
-          child: BlocBuilder<
-            MhsKelasPertemuanDetailBloc,
-            MhsKelasPertemuanDetailState
-          >(
-            builder: (context, state) {
-              return state.maybeWhen(
-                orElse: () {
-                  return const Center(child: CircularProgressIndicator());
-                },
-                loading: () {
-                  return const Center(child: CircularProgressIndicator());
-                },
-                success: (response) {
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 20,
-                      horizontal: 16,
-                    ),
+        child: BlocBuilder<
+          MhsKelasPertemuanDetailBloc,
+          MhsKelasPertemuanDetailState
+        >(
+          builder: (context, state) {
+            // Gunakan maybeMap untuk mendapatkan data atau state lainnya dengan mudah
+            return state.maybeMap(
+              loading:
+                  (_) => const Center(
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // --- BAGIAN HEADER ---
-                        // Judul Utama
-                        Text(
-                          response.data.materi,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                        SpinKitThreeBounce(
+                          color: Colors.blueAccent,
+                          size: 20.0,
+                        ),
+                        Text("Loading..."),
+                      ],
+                    ),
+                  ),
+              success:
+                  (successState) => SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(
+                        24,
+                        20,
+                        24,
+                        100,
+                      ), // Beri padding bawah
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Pertemuan ${successState.data.data.pertemuanKe} - ${successState.data.data.materi}",
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 16),
-                        _buildInfoRow(
-                          icon: Icons.calendar_month,
-                          text: response.data.tanggal.toString(),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                          child: Column(
+                          const SizedBox(height: 8),
+                          // ... (Widget Wrap dan PDF View Anda tetap sama di sini)
+                          Wrap(
+                            spacing: 8,
                             children: [
-                              // Placeholder untuk PDF Viewer
-                              ClipRRect(
-                                borderRadius: BorderRadius.circular(12),
-                                child: Container(
-                                  color: Colors.grey[400],
-                                  height: 200,
-                                  child: Center(
-                                    child: Icon(
-                                      Icons.picture_as_pdf_rounded,
-                                      color: Colors.grey[500],
-                                      size: 50,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              // Deskripsi Materi
                               Text(
-                                response.data.deskripsi,
-                                textAlign: TextAlign.justify,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  height: 1.5,
-                                  color: Colors.black54,
-                                ),
+                                widget.ruangan,
+                                style: const TextStyle(color: Colors.black54),
+                              ),
+                              const Text(
+                                '|',
+                                style: TextStyle(color: Colors.black26),
+                              ),
+                              Text(
+                                widget.waktu,
+                                style: const TextStyle(color: Colors.black54),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 24),
-
-                        // --- BAGIAN TOMBOL AKSI ---
-                        SizedBox(
-                          width: double.infinity, // Membuat tombol full-width
-                          child: Button.filled(
-                            color: AppColors.primary,
-
-                            onPressed: () {
-                              msRoute(context, const ScannerPage());
-                            },
-                            label: 'Scan Presensi',
-                            icon: const Icon(
-                              Icons.qr_code_scanner,
-                              color: Colors.white,
+                          const SizedBox(height: 16),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Container(
+                              color: Colors.grey[300],
+                              child: const SizedBox(
+                                height: 200,
+                                child: Center(child: Text('PDF View')),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 16),
+                          Text(
+                            successState.data.data.deskripsi,
+                            textAlign: TextAlign.justify,
+                            style: const TextStyle(fontSize: 16),
+                          ),
+                          const SizedBox(height: 16),
+                        ],
+                      ),
                     ),
-                  );
-                },
-                error: (message) {
-                  return Center(child: Text(message));
-                },
-              );
-            },
-          ),
+                  ),
+              // Tampilkan CircularProgressIndicator untuk state lainnya
+              orElse: () => const Center(child: CircularProgressIndicator()),
+            );
+          },
+        ),
+      ),
+      // 1. Gunakan bottomNavigationBar untuk tombol yang menempel di bawah
+      bottomNavigationBar: Padding(
+        padding: EdgeInsets.fromLTRB(24, 0, 24, 32), // Padding untuk jarak
+        child: Button.filled(
+          label: "Scan Presensi",
+          color: AppColors.primary,
+          onPressed: () {
+            msRoute(context, const ScannerPage());
+          },
+          height: 45,
+          fontSize: 16,
         ),
       ),
     );
   }
-}
-
-// Helper widget untuk membuat baris info dengan ikon
-Widget _buildInfoRow({required IconData icon, required String text}) {
-  return Row(
-    children: [
-      Icon(icon, color: Colors.blueAccent, size: 20),
-      const SizedBox(width: 12),
-      Text(text, style: TextStyle(fontSize: 15, color: Colors.grey[700])),
-    ],
-  );
 }

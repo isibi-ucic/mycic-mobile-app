@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mycic_app/core/core.dart';
+import 'package:mycic_app/core/helper/date_formatter.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
 import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
 import 'package:mycic_app/data/models/auth_response_model.dart';
@@ -63,31 +64,43 @@ class _HomePageState extends State<HomePage> {
       {
         'title': 'Kelas',
         'icon': Assets.images.menu.jadwal,
-        'page': ClassPage(),
+        'page': const ClassPage(),
       },
       {
         'title': 'Kehadiran',
         'icon': Assets.images.menu.kelas,
-        'page': AbsensiPage(),
+        'page': const AbsensiPage(),
       },
       {
         'title': 'Transkrip',
         'icon': Assets.images.menu.transkrip,
-        'page': TranskripPage(),
+        'page': const TranskripPage(),
       },
-      {'title': 'Nilai KHS', 'icon': Assets.images.menu.khs, 'page': KhsPage()},
-      {'title': 'Ujian', 'icon': Assets.images.menu.ujian, 'page': UjianPage()},
+      {
+        'title': 'Nilai KHS',
+        'icon': Assets.images.menu.khs,
+        'page': const KhsPage(),
+      },
+      {
+        'title': 'Ujian',
+        'icon': Assets.images.menu.ujian,
+        'page': const UjianPage(),
+      },
       {
         'title': 'Skripsi',
         'icon': Assets.images.menu.skripsi,
-        'page': SkripsiPage(),
+        'page': const SkripsiPage(),
       },
       {
         'title': 'Informasi',
         'icon': Assets.images.menu.informasi,
-        'page': InformasiPage(),
+        'page': const InformasiPage(),
       },
-      {'title': 'Semua', 'icon': Assets.images.menu.semua, 'page': ClassPage()},
+      {
+        'title': 'Semua',
+        'icon': Assets.images.menu.semua,
+        'page': const ClassPage(),
+      },
     ];
 
     return Scaffold(
@@ -131,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text(userInfo, style: TextStyle(fontSize: 16)),
+                        Text(userInfo, style: const TextStyle(fontSize: 16)),
                       ],
                     );
                   },
@@ -269,7 +282,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         InkWell(
                           onTap: () {
-                            msRoute(context, TugasPage());
+                            msRoute(context, const TugasPage());
                           },
                           child: const Row(
                             children: [
@@ -313,7 +326,7 @@ class _HomePageState extends State<HomePage> {
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      msRoute(context, TugasPage());
+                                      msRoute(context, const TugasPage());
                                     },
                                     child: Card(
                                       elevation: 1,
@@ -328,7 +341,7 @@ class _HomePageState extends State<HomePage> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              item?.judulTugas ?? '',
+                                              item.judulTugas ?? '',
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.w700,
@@ -336,7 +349,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                             const SizedBox(height: 4),
                                             Text(
-                                              'Due date : ${item?.batasWaktu.toString()}',
+                                              'Batas Waktu : ${DateFormatter.formatHariTanggal(item.batasWaktu.toString())}',
                                               style: const TextStyle(
                                                 fontSize: 12,
                                                 color: Colors.black54,
@@ -355,7 +368,7 @@ class _HomePageState extends State<HomePage> {
                       },
                     ),
 
-                    SizedBox(height: 24),
+                    const SizedBox(height: 24),
                   ],
                 ),
               ),

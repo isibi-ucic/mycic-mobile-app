@@ -9,6 +9,7 @@ import 'package:mycic_app/features/bloc/dsn_kelas_today/dsn_kelas_today_bloc.dar
 import 'package:mycic_app/features/bloc/dsn_tugas/dsn_tugas_bloc.dart';
 import 'package:mycic_app/presentation/screens/dosen/absensi_page.dart';
 import 'package:mycic_app/presentation/screens/dosen/class_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/ujian_page.dart';
 import 'package:mycic_app/presentation/screens/informasi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/tugas_page.dart';
 import 'package:mycic_app/presentation/widgets/all_menu.dart';
@@ -27,6 +28,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // Buat state untuk menampung Future dari data profil
   late Future<AuthResponseModel?> _profileFuture;
+  late String global_name;
 
   @override
   void initState() {
@@ -70,7 +72,7 @@ class _HomePageState extends State<HomePage> {
         'icon': Assets.images.menu.informasi,
         'page': InformasiPage(),
       },
-      {'title': 'Semua', 'icon': Assets.images.menu.semua, 'page': ClassPage()},
+      {'title': 'Ujian', 'icon': Assets.images.menu.ujian, 'page': UjianPage()},
     ];
 
     return Scaffold(
@@ -97,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                     }
 
                     // • Ambil nama jika ada
-                    final nama = snapshot.data?.user.nama ?? '';
+                    global_name = snapshot.data?.user.nama ?? '';
                     // user info
                     final userInfo = snapshot.data?.user.userInfo ?? '';
 
@@ -108,7 +110,7 @@ class _HomePageState extends State<HomePage> {
                           profileImageUrl: snapshot.data?.user.profile ?? '',
                         ),
                         Text(
-                          'Halo, $nama 👋',
+                          'Halo, $global_name 👋',
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -122,7 +124,6 @@ class _HomePageState extends State<HomePage> {
               ),
               // Banner
               // -- UBAH BAGIAN BANNER --
-              // Banner dinamis dari BLoC
               BlocBuilder<DsnKelasTodayBloc, DsnKelasTodayState>(
                 builder: (context, state) {
                   return state.when(
@@ -134,6 +135,7 @@ class _HomePageState extends State<HomePage> {
                           child: Center(child: Text(message)),
                         ),
                     success: (res) {
+                      debugPrint('Banner: $res');
                       // Ubah data model menjadi list widget
                       if (res.data.isEmpty) {
                         return Padding(
@@ -156,7 +158,7 @@ class _HomePageState extends State<HomePage> {
                               title: kelas.mataKuliah,
                               time: kelas.jam,
                               ruangan: kelas.ruang,
-                              dosen: kelas.dosen,
+                              dosen: global_name,
                             );
                           }).toList();
 
