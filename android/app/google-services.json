@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1062873022830",
+    "project_id": "mycic-app",
+    "storage_bucket": "mycic-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1062873022830:android:bf4a88768b954a476a017f",
+        "android_client_info": {
+          "package_name": "com.mycic.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA1zLZ6jdKFLYVK0jlVIKFEbSC48bWpiMQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

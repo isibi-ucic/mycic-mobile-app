@@ -1,3 +1,5 @@
+// ignore_for_file: unused_import
+
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:mycic_app/data/datasources/kelas_remote_datasource.dart';
