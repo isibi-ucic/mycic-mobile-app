@@ -6,11 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_image_gallery_saver/flutter_image_gallery_saver.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intl/intl.dart';
 import 'package:mycic_app/core/assets/assets.gen.dart';
 import 'package:mycic_app/core/components/buttons.dart';
 import 'package:mycic_app/core/constants/colors.dart';
 import 'package:mycic_app/core/helper/ms_route.dart';
 import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan_detail/dsn_kelas_pertemuan_detail_bloc.dart';
+import 'package:mycic_app/features/bloc/generate_qr/generate_qr_bloc.dart';
 import 'package:mycic_app/presentation/screens/dosen/template_page.dart';
 import 'package:mycic_app/presentation/widgets/default_app_bar.dart';
 import 'package:path_provider/path_provider.dart';
@@ -40,6 +42,8 @@ class DetailPertemuanPage extends StatefulWidget {
 class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
   // 1. Buat ScreenshotController dan GlobalKey
   final ScreenshotController _screenshotController = ScreenshotController();
+  // --- STATE BARU UNTUK MENYIMPAN DATETIME DARI FORM ---
+  DateTime? _selectedDateTime;
 
   @override
   void initState() {
@@ -53,6 +57,35 @@ class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
     context.read<DsnKelasPertemuanDetailBloc>().add(
       DsnKelasPertemuanDetailEvent.fetch(widget.pertemuanId),
     );
+  }
+
+  // --- FUNGSI BARU UNTUK MEMBUKA DATE & TIME PICKER ---
+  Future<void> _pickDateTime() async {
+    final DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDateTime ?? DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2030),
+    );
+
+    if (date == null || !mounted) return;
+
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(_selectedDateTime ?? DateTime.now()),
+    );
+
+    if (time == null) return;
+
+    setState(() {
+      _selectedDateTime = DateTime(
+        date.year,
+        date.month,
+        date.day,
+        time.hour,
+        time.minute,
+      );
+    });
   }
 
   // 2. Perbaiki fungsi untuk Share QR Code
@@ -348,40 +381,144 @@ class _DetailPertemuanPageState extends State<DetailPertemuanPage> {
         ),
       ),
       // 1. Gunakan bottomNavigationBar untuk tombol yang menempel di bawah
-      bottomNavigationBar: BlocBuilder<
-        DsnKelasPertemuanDetailBloc,
-        DsnKelasPertemuanDetailState
-      >(
-        builder: (context, state) {
-          // Hanya tampilkan tombol jika state adalah success dan qrPresensi null
-          return state.maybeWhen(
-            success: (response) {
-              if (response.data.qrPresensi == null) {
-                return Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    24,
-                    0,
-                    24,
-                    32,
-                  ), // Padding untuk jarak
-                  child: Button.filled(
-                    label: "Buat QR Presensi",
-                    color: AppColors.primary,
-                    onPressed: () {
-                      msRoute(context, const TemplateDosenPage());
-                    },
-                    height: 45,
-                    fontSize: 16,
-                  ),
+      bottomNavigationBar: _buildBottomSection(),
+    );
+  }
+
+  // --- WIDGET BAGIAN BAWAH YANG BARU DAN LEBIH TERSTRUKTUR ---
+  Widget _buildBottomSection() {
+    // Gunakan BlocBuilder dari DetailPertemuan untuk menentukan apakah form atau QR yang ditampilkan
+    return BlocBuilder<
+      DsnKelasPertemuanDetailBloc,
+      DsnKelasPertemuanDetailState
+    >(
+      builder: (context, state) {
+        return state.maybeWhen(
+          success: (response) {
+            // JIKA QR BELUM ADA, tampilkan form generator
+            if (response.data.qrPresensi == null) {
+              return _buildQrGeneratorForm();
+            }
+            // Jika QR sudah ada, kembalikan widget kosong
+            return const SizedBox.shrink();
+          },
+          // Kembalikan widget kosong untuk state lain (misal: loading awal)
+          orElse: () => const SizedBox.shrink(),
+        );
+      },
+    );
+  }
+
+  // --- WIDGET BARU UNTUK FORM GENERATOR QR ---
+  Widget _buildQrGeneratorForm() {
+    // Listener untuk BLoC generate QR
+    return BlocListener<GenerateQrBloc, GenerateQrState>(
+      listener: (context, state) {
+        state.whenOrNull(
+          // Jika berhasil, tampilkan notifikasi dan muat ulang data halaman
+          success: (qrData) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                const SnackBar(
+                  content: Text('QR Presensi berhasil dibuat!'),
+                  backgroundColor: Colors.green,
+                ),
+              );
+            // Panggil _loadData() untuk refresh halaman dan menampilkan QR
+            _loadData();
+          },
+          // Jika gagal, tampilkan pesan error
+          error: (errorMessage) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Gagal membuat QR: $errorMessage'),
+                  backgroundColor: Colors.red,
+                ),
+              );
+          },
+        );
+      },
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(24, 12, 24, 32),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            const Text(
+              'Pilih Waktu Mulai Presensi',
+              style: TextStyle(fontWeight: FontWeight.w600),
+            ),
+            const SizedBox(height: 8),
+            // Input DateTime
+            InkWell(
+              onTap: _pickDateTime,
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 10,
+                ),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey.shade400),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      _selectedDateTime == null
+                          ? 'Ketuk untuk memilih...'
+                          : DateFormat(
+                            'd MMM yyyy, HH:mm',
+                            'id_ID',
+                          ).format(_selectedDateTime!),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color:
+                            _selectedDateTime == null
+                                ? AppColors.grey
+                                : Colors.black,
+                      ),
+                    ),
+                    const Icon(Icons.calendar_month, color: AppColors.grey),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Tombol Generate QR
+            // Builder ini digunakan agar tombol bisa menampilkan state loading-nya sendiri
+            BlocBuilder<GenerateQrBloc, GenerateQrState>(
+              builder: (context, qrState) {
+                final isLoading = qrState.maybeWhen(
+                  loading: () => true,
+                  orElse: () => false,
                 );
-              }
-              // Jika QR sudah ada, kembalikan widget kosong
-              return const SizedBox.shrink();
-            },
-            // Kembalikan widget kosong untuk state lain
-            orElse: () => const SizedBox.shrink(),
-          );
-        },
+
+                return Button.filled(
+                  label: isLoading ? "Memproses..." : "Buat QR Presensi",
+                  color: AppColors.primary,
+                  onPressed:
+                      (_selectedDateTime == null || isLoading)
+                          ? null // Tombol non-aktif jika waktu belum dipilih atau sedang loading
+                          : () {
+                            // Memicu BLoC Generate QR
+                            context.read<GenerateQrBloc>().add(
+                              GenerateQrEvent.generateQr(
+                                widget.pertemuanId,
+                                _selectedDateTime!,
+                              ),
+                            );
+                          },
+                  height: 45,
+                  fontSize: 16,
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

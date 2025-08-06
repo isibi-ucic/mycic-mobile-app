@@ -1,3 +1,6 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -77,6 +80,47 @@ class AppRemoteDatasource {
         }
       }
       return const Left('Network error'); // or a more specific error message
+    }
+  }
+
+  Future<Either<String, String>> generateQr(
+    int pertemuanId,
+    DateTime batas_waktu,
+  ) async {
+    final url = '${Variables.baseUrl}/dsn/kelas/pertemuan';
+
+    String qrCodeValue =
+        md5.convert(utf8.encode("ID-${pertemuanId.toString()}")).toString();
+
+    try {
+      final response = await _dio.put(
+        url,
+        data: {
+          'id': pertemuanId,
+          "qr_code": qrCodeValue,
+          'batas_waktu': batas_waktu.toIso8601String(),
+        },
+        options: Options(headers: {'Accept': 'application/json'}),
+      );
+
+      debugPrint('response: $response');
+      if (response.statusCode == 200) {
+        return const Right("QR Code berhasil dibuat");
+      } else {
+        return const Left('Data tidak ditemukan!');
+      }
+    } catch (e) {
+      if (e is DioException) {
+        print('Underlying error: ${e.error}');
+
+        if (e.response != null) {
+          final errorResponse = e.response!.data;
+          if (errorResponse != null && errorResponse['message'] != null) {
+            return Left(errorResponse['message']);
+          }
+        }
+      }
+      return Left('Network error'); // or a more specific error message
     }
   }
 }

@@ -8,7 +8,9 @@ import 'package:mycic_app/features/bloc/dsn_kelas/dsn_kelas_bloc.dart';
 import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan/dsn_kelas_pertemuan_bloc.dart';
 import 'package:mycic_app/features/bloc/dsn_kelas_pertemuan_detail/dsn_kelas_pertemuan_detail_bloc.dart';
 import 'package:mycic_app/features/bloc/dsn_kelas_today/dsn_kelas_today_bloc.dart';
+import 'package:mycic_app/features/bloc/dsn_skripsi/dsn_skripsi_bloc.dart';
 import 'package:mycic_app/features/bloc/dsn_tugas/dsn_tugas_bloc.dart';
+import 'package:mycic_app/features/bloc/generate_qr/generate_qr_bloc.dart';
 import 'package:mycic_app/features/bloc/info/info_bloc.dart';
 import 'package:mycic_app/features/bloc/khs/khs_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_kelas/mhs_kelas_bloc.dart';
@@ -18,6 +20,8 @@ import 'package:mycic_app/features/bloc/mhs_kelas_today/mhs_kelas_today_bloc.dar
 import 'package:mycic_app/features/bloc/mhs_presensi/mhs_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_tugas/mhs_tugas_bloc.dart';
 import 'package:mycic_app/features/bloc/mhs_ujian/mhs_ujian_bloc.dart';
+import 'package:mycic_app/features/bloc/presensi_kelas/presensi_kelas_bloc.dart';
+import 'package:mycic_app/features/bloc/presensi_rekap/presensi_rekap_bloc.dart';
 import 'package:mycic_app/features/bloc/skripsi/skripsi_bloc.dart';
 import 'package:mycic_app/features/bloc/submit_presensi/submit_presensi_bloc.dart';
 import 'package:mycic_app/features/bloc/transkrip/transkrip_bloc.dart';
@@ -144,7 +148,11 @@ class _MyCicAppState extends State<MyCicApp> {
         BlocProvider(create: (context) => DsnKelasPertemuanBloc()),
         BlocProvider(create: (context) => DsnKelasPertemuanDetailBloc()),
         BlocProvider(create: (context) => DsnTugasBloc()),
+        BlocProvider(create: (context) => DsnSkripsiBloc()),
         BlocProvider(create: (context) => SkripsiBloc()),
+        BlocProvider(create: (context) => GenerateQrBloc()),
+        BlocProvider(create: (context) => PresensiKelasBloc()),
+        BlocProvider(create: (context) => PresensiRekapBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

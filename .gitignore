@@ -43,3 +43,6 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# This file is generated locally by `flutterfire configure`.
+/lib/firebase_options.dart

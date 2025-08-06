@@ -7,8 +7,10 @@ import 'package:mycic_app/data/datasources/auth_local_datasource.dart';
 import 'package:mycic_app/data/models/auth_response_model.dart';
 import 'package:mycic_app/features/bloc/dsn_kelas_today/dsn_kelas_today_bloc.dart';
 import 'package:mycic_app/features/bloc/dsn_tugas/dsn_tugas_bloc.dart';
-import 'package:mycic_app/presentation/screens/dosen/absensi_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/presensi_page.dart';
 import 'package:mycic_app/presentation/screens/dosen/class_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/detail_pertemuan_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/skripsi_page.dart';
 import 'package:mycic_app/presentation/screens/dosen/ujian_page.dart';
 import 'package:mycic_app/presentation/screens/informasi_page.dart';
 import 'package:mycic_app/presentation/screens/mhs/tugas_page.dart';
@@ -65,14 +67,18 @@ class _HomePageState extends State<HomePage> {
       {
         'title': 'Presensi MK',
         'icon': Assets.images.menu.kelas,
-        'page': AbsensiPage(),
+        'page': PresensiPage(),
       },
       {
         'title': 'Informasi',
         'icon': Assets.images.menu.informasi,
         'page': InformasiPage(),
       },
-      {'title': 'Ujian', 'icon': Assets.images.menu.ujian, 'page': UjianPage()},
+      {
+        'title': 'Skripsi',
+        'icon': Assets.images.menu.skripsi,
+        'page': SkripsiPage(),
+      },
     ];
 
     return Scaffold(
@@ -276,7 +282,6 @@ class _HomePageState extends State<HomePage> {
 
                     BlocBuilder<DsnTugasBloc, DsnTugasState>(
                       builder: (context, state) {
-                        debugPrint('state: $state');
                         return state.when(
                           initial: () => const TugasListSkeleton(),
                           loading: () => const TugasListSkeleton(),
@@ -298,7 +303,15 @@ class _HomePageState extends State<HomePage> {
                                   padding: const EdgeInsets.only(bottom: 8.0),
                                   child: GestureDetector(
                                     onTap: () {
-                                      msRoute(context, TugasPage());
+                                      msRoute(
+                                        context,
+                                        DetailPertemuanPage(
+                                          pertemuanId: item.idPertemuan,
+                                          namaMatkul: item.namaMk,
+                                          ruangan: "",
+                                          waktu: item.tanggal.toString(),
+                                        ),
+                                      );
                                     },
                                     child: Card(
                                       elevation: 1,

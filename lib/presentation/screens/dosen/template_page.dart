@@ -2,7 +2,7 @@
 // Suggested code may be subject to a license. Learn more: ~LicenseLog:3990274555.
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mycic_app/presentation/screens/dosen/absensi_page.dart';
+import 'package:mycic_app/presentation/screens/dosen/presensi_page.dart';
 import 'package:mycic_app/presentation/screens/dosen/class_page.dart';
 import 'package:mycic_app/presentation/screens/dosen/home_page.dart';
 // import 'package:mycic_app/presentation/screens/scanner_page.dart';
@@ -21,7 +21,7 @@ class _TemplateDosenPageState extends State<TemplateDosenPage> {
   final _widgets = [
     // const HomePage(),
     const HomePage(),
-    AbsensiPage(),
+    const PresensiPage(),
     const ClassPage(),
   ];
   @override
